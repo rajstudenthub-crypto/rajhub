@@ -17,7 +17,6 @@
         .bg-teal-accent { background-color: #1ABC9C; /* Vibrant Teal Accent */ }
         
         /* --- FONT FIX: ENFORCING QUICKSAND FOR A CONSISTENT ROUNDED LOOK --- */
-        /* Applying Quicksand (the rounded font) to the body and all key elements */
         body, button, input, textarea, select, h1, h2, h3, a {
             font-family: 'Quicksand', sans-serif !important; 
         }
@@ -25,7 +24,6 @@
             background-color: #f8fafc; /* Tailwind gray-50 */
             transition: background-color 0.3s;
         }
-        /* Ensure all main headings keep their bold weight */
         h1, h2, h3 {
             font-weight: 700 !important;
         }
@@ -38,24 +36,22 @@
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch; 
             padding-bottom: 1rem;
-            /* MOBILE/TABLET: Adjust padding to accommodate the new card width */
+            /* Adjusted padding for touch target comfort */
             padding-left: 0.5rem; 
             padding-right: 0.5rem;
         }
         .product-card {
-            /* ADJUSTED WIDTH: From 50% to 40% - makes the cards narrower/taller */
-            flex: 0 0 calc(40% - 8px); 
+            /* FIXED MOBILE WIDTH: Slightly narrower (from 40% to 38%) for more internal space */
+            flex: 0 0 calc(38% - 8px); 
             max-width: none;
             scroll-snap-align: start;
             margin-right: 1rem;
             margin-left: 0.5rem; 
         }
-        /* DESKTOP: Adjust to show more items, making cards narrower */
+        /* DESKTOP: Keep existing size */
         @media (min-width: 768px) {
             .product-card {
-                /* Reduced from 30% to 28% for narrower feel */
                 flex: 0 0 28%; 
-                /* Reduced max-width from 280px to 260px */
                 max-width: 260px;
                 margin-left: 0; 
             }
@@ -83,14 +79,12 @@
                         'charcoal': '#2C3E50',
                         'teal-accent': '#1ABC9C',
                         'light-gray': '#F4F4F4',
-                        // Light red/salmon color for the button
                         'salmon-accent': '#FF6B6B', 
                     }
                 }
             }
         }
 
-        // Renaming isTopSelling to isFeatured for simplicity. isNewArrival flag is entirely removed.
         const productData = [
             // --- Featured (6 Items: ids 1, 4, 8, 2, 5, 6) ---
             { id: 1, name: "Matador i-teen Gel Pen (6-Pack)", category: "Stationery", price: 61, isFeatured: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Matador+Pen" },
@@ -270,16 +264,17 @@
                     <!-- Increased spacing: mb-3 instead of mb-2 -->
                     <h3 class="text-lg font-semibold text-charcoal mb-3 truncate">${product.name}</h3>
                     
-                    <!-- NEW LAYOUT: Price on Left, Button on Right -->
-                    <div class="flex justify-between items-center space-x-2">
+                    <!-- !!! MOBILE FIX APPLIED HERE: FORCE VERTICAL STACK ON MOBILE (flex-col) and horizontal on tablet+ (sm:flex-row) !!! -->
+                    <div class="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-center sm:space-y-0">
                         <!-- Price on Left -->
                         <div class="text-left flex-shrink-0">
-                            <!-- BDT currency symbol (৳) -->
-                            <span class="final-price text-2xl font-extrabold text-teal-accent">৳ ${product.price}</span>
+                            <!-- REDUCED PRICE FONT SIZE for mobile: text-xl (was text-2xl) -->
+                            <span class="final-price text-xl font-extrabold text-teal-accent">৳ ${product.price}</span>
                         </div>
                         
-                        <!-- Button on Right (REVERTED: text-xs, smaller padding, reduced boldness, no uppercase/tracking) -->
-                        <button onclick="handleKinunClick(${product.id})" class="kinun-button flex-shrink-0 px-3 py-1.5 bg-salmon-accent text-white text-xs rounded-full font-semibold hover:bg-red-500 transition duration-200 shadow-md">
+                        <!-- Button on Right -->
+                        <button onclick="handleKinunClick(${product.id})" 
+                            class="kinun-button w-full sm:w-auto flex-shrink-0 px-3 py-1.5 bg-salmon-accent text-white text-xs rounded-full font-semibold hover:bg-red-500 transition duration-200 shadow-md">
                             Order Now
                         </button>
                     </div>
@@ -568,8 +563,6 @@
             <section id="stationary-products-strip" class="mb-12 relative">
                 <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-teal-accent pb-2">Stationery Hub</h2>
 
-                <!-- Navigation Buttons REMOVED -->
-
                 <!-- Product Cards Grid: Uses 'grid' classes instead of 'product-track' class -->
                 <div id="stationary-carousel-track" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
                     <!-- Stationery product cards are rendered here by JavaScript: renderHomeCarousels() -->
@@ -579,8 +572,6 @@
             <!-- 3. GIRLS HUB STRIP (NOW A GRID) -->
             <section id="girls-hub-products-strip" class="mb-12 relative">
                 <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-teal-accent pb-2">Girls Hub</h2>
-
-                <!-- Navigation Buttons REMOVED -->
 
                 <!-- Product Cards Grid: Uses 'grid' classes instead of 'product-track' class -->
                 <div id="girls-hub-carousel-track" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -592,8 +583,6 @@
             <section id="boys-hub-products-strip" class="mb-12 relative">
                 <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-teal-accent pb-2">Boys Hub</h2>
 
-                <!-- Navigation Buttons REMOVED -->
-
                 <!-- Product Cards Grid: Uses 'grid' classes instead of 'product-track' class -->
                 <div id="boys-hub-carousel-track" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
                     <!-- Boys Hub product cards are rendered here by JavaScript: renderHomeCarousels() -->
@@ -604,8 +593,6 @@
             <section id="bags-products-strip" class="mb-12 relative">
                 <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-teal-accent pb-2">Bags & Backpacks</h2>
                 
-                <!-- Navigation Buttons REMOVED -->
-
                 <!-- Product Cards Grid: Uses 'grid' classes instead of 'product-track' class -->
                 <div id="bags-carousel-track" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
                     <!-- Bags product cards are rendered here by JavaScript: renderHomeCarousels() -->
