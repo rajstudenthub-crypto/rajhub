@@ -7,8 +7,8 @@
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- ADDED: Google Fonts CDN for Quicksand (Headings) and Poppins (Body) -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Quicksand:wght@700&display=swap" rel="stylesheet">
+    <!-- ADDED: Google Fonts CDN for Quicksand (Rounded Font) -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
         /* Custom styles for the minimal, premium look */
@@ -16,16 +16,18 @@
         .text-teal { color: #1ABC9C; /* Vibrant Teal Accent */ }
         .bg-teal-accent { background-color: #1ABC9C; /* Vibrant Teal Accent */ }
         
-        /* FIX: Set Poppins as the default font for body text and ensure priority */
+        /* --- FONT FIX: ENFORCING QUICKSAND FOR A CONSISTENT ROUNDED LOOK --- */
+        /* Applying Quicksand (the rounded font) to the body and all key elements */
+        body, button, input, textarea, select, h1, h2, h3, a {
+            font-family: 'Quicksand', sans-serif !important; 
+        }
         body {
-            font-family: 'Poppins', sans-serif !important; /* IMPORTANT FIX APPLIED HERE */
             background-color: #f8fafc; /* Tailwind gray-50 */
             transition: background-color 0.3s;
         }
-        /* NEW: Apply Quicksand to all main headings for a friendly style */
+        /* Ensure all main headings keep their bold weight */
         h1, h2, h3 {
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 700;
+            font-weight: 700 !important;
         }
         
         /* Styles for the auto-scrolling product track */
@@ -64,6 +66,12 @@
         /* Hide scrollbar visually */
         .product-track::-webkit-scrollbar { display: none; }
         .product-track { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Modal Overlay */
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.75);
+            transition: opacity 0.3s ease-out;
+        }
     </style>
     <script>
         tailwind.config = {
@@ -80,28 +88,33 @@
 
         // --- PRODUCT DATA (Expanded, BDT currency) ---
         const productData = [
-            // --- Top Selling (3 Items) ---
+            // --- Top Selling (6 Items: ids 1, 4, 8, 2, 5, 6) ---
             { id: 1, name: "Matador i-teen Gel Pen (6-Pack)", category: "Stationery", price: 72, discount: 61, off: 15, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Matador+Pen" },
             { id: 4, name: "Minimalist Silver Stud Earrings", category: "Girls Hub", price: 199, discount: 169, off: 15, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Earrings" },
             { id: 8, name: "Water-Resistant Laptop Backpack", category: "Bags", price: 1800, discount: 1440, off: 20, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Backpack" },
+            { id: 2, name: "A4 Notebook (200 Pages)", category: "Stationery", price: 120, discount: 108, off: 10, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=A4+Notebook" },
+            { id: 5, name: "Aesthetic Spiral Planner (2025)", category: "Girls Hub", price: 350, discount: 280, off: 20, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Planner" },
+            { id: 6, name: "32GB USB 3.0 Flash Drive", category: "Boys Hub", price: 550, discount: 495, off: 10, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Flash+Drive" },
 
-            // --- New Arrivals (3 Items) ---
+
+            // --- New Arrivals (6 Items: ids 13, 16, 20, 9, 10, 11) ---
             { id: 13, name: "Pastel Gel Ink Pen Set", category: "Girls Hub", price: 250, discount: 200, off: 20, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Pastel+Pens" },
             { id: 16, name: "Multi-Tool Keychain (Student Edition)", category: "Boys Hub", price: 140, discount: 112, off: 20, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Multi-Tool" },
             { id: 20, name: "Minimalist Sling Bag", category: "Bags", price: 600, discount: 510, off: 15, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Sling+Bag" },
+            { id: 9, name: "Canvas Tote Bag (Large)", category: "Bags", price: 390, discount: 330, off: 15, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Tote+Bag" },
+            { id: 10, name: "Mesh Pencil Pouch (Zipper)", category: "Bags", price: 150, discount: 135, off: 10, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Pouch" },
+            { id: 11, name: "Scientific Calculator (FX-991)", category: "Stationery", price: 950, discount: 855, off: 10, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Calculator" },
 
-            // --- Stationery (7+ total products) ---
-            { id: 2, name: "A4 Notebook (200 Pages)", category: "Stationery", price: 120, discount: 108, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=A4+Notebook" },
+
+            // --- Stationery (Remaining items only) ---
             { id: 3, name: "Faber-Castell 2B Pencil Set", category: "Stationery", price: 90, discount: 72, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Pencil+Set" },
-            { id: 11, name: "Scientific Calculator (FX-991)", category: "Stationery", price: 950, discount: 855, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Calculator" },
             { id: 12, name: "Highlight Marker Set (6 Colors)", category: "Stationery", price: 180, discount: 144, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Markers" },
             { id: 21, name: "Lamy-Style Fountain Pen (Budget)", category: "Stationery", price: 380, discount: 342, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Fountain+Pen" },
             { id: 22, name: "White Correction Pen Set (3 PCS)", category: "Stationery", price: 110, discount: 99, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Correction+Pen" },
             { id: 23, name: "PVC Clear Book Cover Rolls", category: "Stationery", price: 150, discount: 120, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Book+Covers" },
 
 
-            // --- Girls Hub (7+ total products) ---
-            { id: 5, name: "Aesthetic Spiral Planner (2025)", category: "Girls Hub", price: 350, discount: 280, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Planner" },
+            // --- Girls Hub (Remaining items only) ---
             { id: 14, name: "Hair Scrunchie Pack (10 PCS)", category: "Girls Hub", price: 150, discount: 120, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Scrunchies" },
             { id: 15, name: "Compact Makeup Mirror", category: "Girls Hub", price: 99, discount: 84, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Mirror" },
             { id: 24, name: "Cute Animal Eraser Set (5 PCS)", category: "Girls Hub", price: 80, discount: 64, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Eraser+Set" },
@@ -110,8 +123,7 @@
             { id: 27, name: "Pastel Color Metal Water Bottle (500ml)", category: "Girls Hub", price: 499, discount: 424, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Water+Bottle" },
             
 
-            // --- Boys Hub (7+ total products) ---
-            { id: 6, name: "32GB USB 3.0 Flash Drive", category: "Boys Hub", price: 550, discount: 495, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Flash+Drive" },
+            // --- Boys Hub (Remaining items only) ---
             { id: 7, name: "Minimalist Bi-Fold Wallet (Black)", category: "Boys Hub", price: 280, discount: 238, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Wallet" },
             { id: 17, name: "Wired Gaming Mouse (Budget)", category: "Boys Hub", price: 450, discount: 382, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Mouse" },
             { id: 18, name: "Premium Phone Stand", category: "Boys Hub", price: 199, discount: 179, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Phone+Stand" },
@@ -120,9 +132,7 @@
             { id: 30, name: "Durable Headphone Case (Hard Shell)", category: "Boys Hub", price: 320, discount: 272, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Headphone+Case" },
 
 
-            // --- Bags (7+ total products) ---
-            { id: 9, name: "Canvas Tote Bag (Large)", category: "Bags", price: 390, discount: 330, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Tote+Bag" },
-            { id: 10, name: "Mesh Pencil Pouch (Zipper)", category: "Bags", price: 150, discount: 135, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Pouch" },
+            // --- Bags (Remaining items only) ---
             { id: 19, name: "Drawstring Gym Bag", category: "Bags", price: 250, discount: 200, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Gym+Bag" },
             { id: 31, name: "Premium Pencil Box (Hard Shell)", category: "Bags", price: 420, discount: 357, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Pencil+Box" },
             { id: 32, name: "Folding Shopping Bag (Reusable)", category: "Bags", price: 100, discount: 85, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Shopping+Bag" },
@@ -132,6 +142,7 @@
         
         // --- CORE PAGE ROUTING LOGIC ---
         let currentScrollIntervals = [];
+        let currentCheckoutProduct = null; // Global state for the checkout item
         
         function showPage(pageId) {
             // Stop all ongoing auto-scroll when switching pages
@@ -152,21 +163,19 @@
             // Handle unique initialization for each page
             if (pageId === 'home-page') {
                 renderHomeCarousels();
-                // Start auto-scroll for all 6 carousels
+                // --- Start auto-scroll ONLY for Top Selling and New Arrivals ---
                 currentScrollIntervals.push(startAutoScroll('top-selling-carousel-track'));
                 currentScrollIntervals.push(startAutoScroll('new-arrivals-carousel-track'));
-                currentScrollIntervals.push(startAutoScroll('stationary-carousel-track'));
-                currentScrollIntervals.push(startAutoScroll('girls-hub-carousel-track'));
-                currentScrollIntervals.push(startAutoScroll('boys-hub-carousel-track'));
-                currentScrollIntervals.push(startAutoScroll('bags-carousel-track'));
+                
+                // Category carousels (stationary, girls-hub, boys-hub, bags) are manually scrollable only.
             } else if (pageId === 'stationary-page') {
-                renderCategoryPage('Stationery', 'Stationery');
+                renderCategoryPage('Stationery');
             } else if (pageId === 'girls-hub-page') {
-                renderCategoryPage('Girls Hub', 'Girls Hub');
+                renderCategoryPage('Girls Hub');
             } else if (pageId === 'boys-hub-page') {
-                renderCategoryPage('Boys Hub', 'Boys Hub');
+                renderCategoryPage('Boys Hub');
             } else if (pageId === 'bags-page') {
-                renderCategoryPage('Bags', 'Bags & Backpacks');
+                renderCategoryPage('Bags');
             }
             
             // Close mobile menu if open
@@ -204,25 +213,25 @@
 
             // 3. Stationery Hub
             if (stationaryContainer) {
-                const products = productData.filter(p => p.category === 'Stationery');
+                const products = productData.filter(p => p.category === 'Stationery' && !p.isTopSelling && !p.isNewArrival);
                 stationaryContainer.innerHTML = products.map(product => renderProductCard(product, true)).join('');
             }
             
             // 4. Girls Hub products
             if (girlsHubContainer) {
-                const products = productData.filter(p => p.category === 'Girls Hub');
+                const products = productData.filter(p => p.category === 'Girls Hub' && !p.isTopSelling && !p.isNewArrival);
                 girlsHubContainer.innerHTML = products.map(product => renderProductCard(product, true)).join('');
             }
             
             // 5. Boys Hub products
             if (boysHubContainer) {
-                const products = productData.filter(p => p.category === 'Boys Hub');
+                const products = productData.filter(p => p.category === 'Boys Hub' && !p.isTopSelling && !p.isNewArrival);
                 boysHubContainer.innerHTML = products.map(product => renderProductCard(product, true)).join('');
             }
 
             // 6. Bags products
             if (bagsContainer) {
-                const products = productData.filter(p => p.category === 'Bags');
+                const products = productData.filter(p => p.category === 'Bags' && !p.isTopSelling && !p.isNewArrival);
                 bagsContainer.innerHTML = products.map(product => renderProductCard(product, true)).join('');
             }
         }
@@ -232,6 +241,7 @@
             const container = document.getElementById(category.toLowerCase().replace(/\s/g, '-') + '-products');
             if (!container) return;
 
+            // Fetch ALL products belonging to this category, regardless of featured status
             const filteredProducts = productData.filter(p => p.category === category);
             
             // Display a message if no products are found
@@ -264,29 +274,107 @@
                         <span class="ml-auto text-xs font-bold bg-red-100 text-red-600 px-2 py-0.5 rounded-full">${product.off}% OFF</span>
                     </div>
                     
-                    <button onclick="handleKinunClick('${product.name}', ${product.discount})" class="kinun-button w-full bg-teal-accent text-white py-2 rounded-full font-medium hover:bg-[#158C7C] transition duration-200 shadow-md">
+                    <button onclick="handleKinunClick(${product.id})" class="kinun-button w-full bg-teal-accent text-white py-2 rounded-full font-medium hover:bg-[#158C7C] transition duration-200 shadow-md">
                         Order Now
                     </button>
                 </div>
             `;
         }
         
-        // --- UTILITY FUNCTIONS ---
-        
-        // Function for the 'Order Now' button tap
-        function handleKinunClick(productName, price) {
-            const messageBox = document.getElementById('message-box');
-            const messageText = document.getElementById('message-text');
+        // --- CHECKOUT LOGIC ---
 
-            // Using BDT currency symbol (৳)
-            messageText.innerHTML = `<span class="font-bold">${productName}</span> added to cart! Total: ৳ ${price}.<br>Next: <span class="text-teal-accent font-bold">SSLCommerz Payment Gateway</span> integration.`;
-            messageBox.classList.remove('hidden');
+        // Function for the 'Order Now' button tap
+        function handleKinunClick(productId) {
+            const product = productData.find(p => p.id === productId);
+            if (!product) {
+                console.error("Product not found for ID:", productId);
+                return;
+            }
+
+            currentCheckoutProduct = product;
             
-            // Auto hide after 4 seconds
-            setTimeout(() => {
-                messageBox.classList.add('hidden');
-            }, 4000);
+            // Populate modal with product info
+            document.getElementById('checkout-product-title').textContent = product.name;
+            document.getElementById('checkout-product-price').textContent = `৳ ${product.discount}`;
+            document.getElementById('checkout-total-price').textContent = `৳ ${product.discount}`;
+            document.getElementById('product-image-modal').src = product.imageUrl;
+            
+            // Show the modal and prevent background scrolling
+            document.getElementById('checkout-modal').classList.remove('hidden');
+            document.body.classList.add('overflow-hidden'); 
+
+            // Ensure the form content is visible (in case a confirmation message was shown previously)
+            document.getElementById('modal-content-form').classList.remove('hidden');
+            document.getElementById('modal-content-confirmation').classList.add('hidden');
         }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+            currentCheckoutProduct = null;
+            // Clear form fields
+            document.getElementById('checkout-form').reset();
+        }
+
+        function handleCheckoutSubmit(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value;
+
+            // Simple validation
+            if (!name || !phone || !address || !paymentMethod) {
+                document.getElementById('form-error').textContent = "Please fill in all details and select a payment method.";
+                document.getElementById('form-error').classList.remove('hidden');
+                return;
+            }
+            document.getElementById('form-error').classList.add('hidden');
+
+            const product = currentCheckoutProduct;
+
+            // Prepare the confirmation message details
+            const confirmationDetails = `
+                <div class="text-left space-y-2 text-gray-700">
+                    <p><strong>Item:</strong> ${product.name}</p>
+                    <p><strong>Total Price:</strong> <span class="text-teal-accent font-bold">৳ ${product.discount}</span></p>
+                    <p><strong>Name:</strong> ${name}</p>
+                    <p><strong>Phone:</strong> ${phone}</p>
+                    <p><strong>Address:</strong> ${address}</p>
+                    <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+                </div>
+                <p class="mt-4 text-sm text-gray-500">A representative will contact you shortly to confirm the MFS payment details.</p>
+            `;
+
+            // Display confirmation screen
+            showConfirmationMessage(confirmationDetails);
+        }
+
+        function showConfirmationMessage(detailsHTML) {
+            document.getElementById('modal-content-form').classList.add('hidden');
+            const confirmationDiv = document.getElementById('modal-content-confirmation');
+            confirmationDiv.classList.remove('hidden');
+
+            confirmationDiv.innerHTML = `
+                <div class="p-4 sm:p-8 text-center">
+                    <!-- Checkmark Icon -->
+                    <svg class="w-16 h-16 text-teal-accent mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    
+                    <h2 class="text-2xl font-bold text-charcoal mb-4">Order Confirmed!</h2>
+                    
+                    <div class="bg-light-gray p-4 rounded-lg shadow-inner inline-block">
+                        ${detailsHTML}
+                    </div>
+
+                    <button onclick="closeCheckoutModal()" class="mt-8 w-full px-6 py-3 bg-teal-accent text-white rounded-full font-bold hover:bg-[#158C7C] transition duration-200">
+                        Continue Shopping
+                    </button>
+                </div>
+            `;
+        }
+        
+        // --- UTILITY FUNCTIONS ---
         
         // Manual scroll for carousel buttons
         function scrollCarousel(trackId, direction) {
@@ -349,10 +437,7 @@
 </head>
 <body class="bg-white text-gray-800 font-sans min-h-screen flex flex-col">
 
-    <!-- Message Box (Alert replacement) -->
-    <div id="message-box" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 p-4 rounded-lg bg-teal-accent text-white shadow-2xl z-50 text-center transition-opacity duration-300">
-        <p id="message-text" class="text-sm"></p>
-    </div>
+    <!-- REMOVED OLD MESSAGE BOX (Alert replacement) -->
 
     <!-- HEADER (Navigation) -->
     <header class="header-charcoal text-white shadow-lg sticky top-0 z-40">
@@ -442,7 +527,7 @@
                     <h1 class="text-3xl sm:text-5xl font-extrabold text-charcoal mb-3 leading-tight">
                         Students Friendly Hub In Rajshahi
                     </h1>
-                    <p class="text-base sm:text-xl text-gray-600 mb-6">Premium Essentials for a Minimal Price</p>
+                    <p class="text-base sm:text-xl text-gray-600 mb-6">Premium Essentials for a Minimal Price. Guaranteed Student Savings!</p>
                     <a href="#top-selling-products-strip" class="px-6 py-3 bg-teal-accent text-white font-bold rounded-full shadow-lg hover:bg-[#158C7C] transition duration-200 uppercase text-sm sm:text-base">
                         View Top Selling Deals
                     </a>
@@ -495,7 +580,7 @@
                 </div>
             </section>
 
-            <!-- --- CATEGORY CAROUSELS (Consistent Caption Style) --- -->
+            <!-- --- CATEGORY CAROUSELS (Now Manual Scroll Only) --- -->
 
             <!-- 3. STATIONERY HUB STRIP -->
             <section id="stationary-products-strip" class="mb-12 relative">
@@ -588,52 +673,147 @@
         </section>
 
         <!-- ============================================== -->
-        <!-- 2. STATIONERY PAGE VIEW -->
+        <!-- 2. CATEGORY PAGES VIEW (Simplified for brevity) -->
+        <!-- NOTE: Grid adjusted to ensure 2 products visible on mobile/small screens -->
         <!-- ============================================== -->
         <section id="stationary-page" class="content-page hidden min-h-[60vh]">
             <h1 class="text-3xl font-bold text-charcoal mb-8 border-b-2 border-teal-accent pb-2">Stationery Essentials</h1>
             <p class="mb-6 text-gray-600">High-quality pens, notebooks, and academic tools for focused study sessions across Rajshahi.</p>
-            <div id="stationary-products" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- UPDATED GRID: grid-cols-2 is the default for mobile, md:grid-cols-3 for tablets, lg:grid-cols-4 for desktop -->
+            <div id="stationary-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Stationery products will be rendered here by renderCategoryPage() -->
             </div>
         </section>
         
-        <!-- ============================================== -->
-        <!-- 3. GIRLS HUB PAGE VIEW -->
-        <!-- ============================================== -->
         <section id="girls-hub-page" class="content-page hidden min-h-[60vh]">
             <h1 class="text-3xl font-bold text-charcoal mb-8 border-b-2 border-teal-accent pb-2">Girls Hub: Style & Organization</h1>
             <p class="mb-6 text-gray-600">Minimalist accessories, aesthetic planners, and stylish gear to complement your campus look.</p>
-            <div id="girls-hub-products" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- UPDATED GRID -->
+            <div id="girls-hub-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Girls Hub products will be rendered here by renderCategoryPage() -->
             </div>
         </section>
 
-        <!-- ============================================== -->
-        <!-- 4. BOYS HUB PAGE VIEW -->
-        <!-- ============================================== -->
         <section id="boys-hub-page" class="content-page hidden min-h-[60vh]">
             <h1 class="text-3xl font-bold text-charcoal mb-8 border-b-2 border-teal-accent pb-2">Boys Hub: Tech & Utility</h1>
             <p class="mb-6 text-gray-600">Durable storage, essential tech gadgets, and tools built for engineering and science students.</p>
-            <div id="boys-hub-products" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- UPDATED GRID -->
+            <div id="boys-hub-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Boys Hub products will be rendered here by renderCategoryPage() -->
             </div>
         </section>
 
-        <!-- ============================================== -->
-        <!-- 5. BAGS PAGE VIEW -->
-        <!-- ============================================== -->
         <section id="bags-page" class="content-page hidden min-h-[60vh]">
-            <!-- FIX: Changed border-[#E67E22] to border-teal-accent for theme consistency -->
             <h1 class="text-3xl font-bold text-charcoal mb-8 border-b-2 border-teal-accent pb-2">Bags & Backpacks</h1>
             <p class="mb-6 text-gray-600">Water-resistant backpacks and simple totes designed to carry laptops and study material safely.</p>
-            <div id="bags-products" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- UPDATED GRID -->
+            <div id="bags-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Bags products will be rendered here by renderCategoryPage() -->
             </div>
         </section>
 
     </main>
+    
+    <!-- ============================================== -->
+    <!-- CHECKOUT MODAL (FIXED OVERLAY) -->
+    <!-- ============================================== -->
+    <div id="checkout-modal" class="hidden modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
+        
+        <!-- Modal Backdrop (for closing on outside click) -->
+        <div class="absolute inset-0" onclick="closeCheckoutModal()"></div>
 
+        <!-- Modal Content Container -->
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto transform transition-all duration-300 relative z-10">
+            
+            <!-- Close Button -->
+            <button onclick="closeCheckoutModal()" class="absolute top-3 right-3 p-2 text-charcoal hover:text-teal-accent transition">
+                <!-- Close Icon SVG -->
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <!-- Checkout Form Content -->
+            <div id="modal-content-form">
+                <div class="bg-charcoal text-white p-6 rounded-t-xl text-center">
+                    <h2 class="text-2xl font-bold">Complete Your Order</h2>
+                </div>
+
+                <div class="p-6">
+                    
+                    <!-- Product Summary -->
+                    <div class="flex items-center space-x-4 mb-6 border-b pb-4">
+                        <img id="product-image-modal" src="https://placehold.co/80x80/F4F4F4/2C3E50?text=Item" alt="Product Thumbnail" class="w-16 h-16 object-cover rounded-lg">
+                        <div>
+                            <p class="text-sm text-gray-500">Item:</p>
+                            <h3 id="checkout-product-title" class="text-xl font-semibold text-charcoal truncate">Product Name</h3>
+                        </div>
+                        <p id="checkout-product-price" class="text-2xl font-extrabold text-teal-accent ml-auto">৳ 000</p>
+                    </div>
+
+                    <form id="checkout-form" onsubmit="handleCheckoutSubmit(event)">
+                        <!-- Customer Information -->
+                        <h4 class="text-lg font-bold text-charcoal mb-3">1. Your Contact Information</h4>
+                        <div class="space-y-4 mb-6">
+                            <input type="text" id="name" placeholder="Full Name" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-accent focus:border-teal-accent transition">
+                            <input type="tel" id="phone" placeholder="Phone Number (e.g., 01XXXXXXXXX)" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-accent focus:border-teal-accent transition">
+                            <textarea id="address" placeholder="Full Delivery Address in Rajshahi" required rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-accent focus:border-teal-accent transition"></textarea>
+                        </div>
+
+                        <!-- Payment Method Selection -->
+                        <h4 class="text-lg font-bold text-charcoal mb-3">2. Select Payment Method</h4>
+                        <div class="space-y-3 mb-6">
+                            
+                            <!-- bKash Option -->
+                            <label class="flex items-center p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-light-gray transition duration-150 has-checked:border-teal-accent">
+                                <input type="radio" name="payment_method" value="bKash" class="form-radio h-5 w-5 text-teal-accent checked:bg-teal-accent focus:ring-teal-accent" required>
+                                <span class="ml-3 font-semibold text-gray-700 flex items-center">
+                                    <img src="https://placehold.co/40x20/E11961/FFFFFF?text=bKash" alt="bKash Logo" class="w-10 h-5 object-contain mr-2 rounded">
+                                    bKash (Mobile Banking)
+                                </span>
+                            </label>
+
+                            <!-- Rocket Option -->
+                            <label class="flex items-center p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-light-gray transition duration-150">
+                                <input type="radio" name="payment_method" value="Rocket" class="form-radio h-5 w-5 text-teal-accent checked:bg-teal-accent focus:ring-teal-accent">
+                                <span class="ml-3 font-semibold text-gray-700 flex items-center">
+                                    <img src="https://placehold.co/40x20/92278F/FFFFFF?text=Rocket" alt="Rocket Logo" class="w-10 h-5 object-contain mr-2 rounded">
+                                    Rocket (Mobile Banking)
+                                </span>
+                            </label>
+                            
+                            <!-- Nagad Option -->
+                            <label class="flex items-center p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-light-gray transition duration-150">
+                                <input type="radio" name="payment_method" value="Nagad" class="form-radio h-5 w-5 text-teal-accent checked:bg-teal-accent focus:ring-teal-accent">
+                                <span class="ml-3 font-semibold text-gray-700 flex items-center">
+                                    <img src="https://placehold.co/40x20/FF7701/FFFFFF?text=Nagad" alt="Nagad Logo" class="w-10 h-5 object-contain mr-2 rounded">
+                                    Nagad (Mobile Banking)
+                                </span>
+                            </label>
+                        </div>
+
+                        <!-- Summary & Submit -->
+                        <div class="flex justify-between items-center bg-gray-100 p-4 rounded-lg mb-4">
+                            <span class="text-lg font-semibold text-charcoal">Total Payable:</span>
+                            <span id="checkout-total-price" class="text-2xl font-extrabold text-teal-accent">৳ 000</span>
+                        </div>
+                        
+                        <!-- Error Message -->
+                        <p id="form-error" class="hidden text-sm text-center text-red-600 mb-4 font-medium"></p>
+
+                        <button type="submit" class="w-full px-6 py-3 bg-teal-accent text-white font-bold rounded-full shadow-lg hover:bg-[#158C7C] transition duration-200 uppercase">
+                            Place Order (Cash on Delivery / MFS)
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Confirmation Message Content (Hidden until order submission) -->
+            <div id="modal-content-confirmation" class="hidden">
+                <!-- Content generated by showConfirmationMessage() -->
+            </div>
+            
+        </div>
+    </div>
+    
     <!-- FOOTER -->
     <footer class="bg-charcoal text-white mt-12 py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
@@ -647,4 +827,3 @@
 
 </body>
 </html>
-
