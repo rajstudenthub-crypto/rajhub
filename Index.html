@@ -16,15 +16,16 @@
         .text-teal { color: #1ABC9C; /* Vibrant Teal Accent */ }
         .bg-teal-accent { background-color: #1ABC9C; /* Vibrant Teal Accent */ }
         
-        /* UPDATED: Set Poppins as the default font for body text */
+        /* FIX: Set Poppins as the default font for body text and ensure priority */
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', sans-serif !important; /* IMPORTANT FIX APPLIED HERE */
             background-color: #f8fafc; /* Tailwind gray-50 */
             transition: background-color 0.3s;
         }
         /* NEW: Apply Quicksand to all main headings for a friendly style */
         h1, h2, h3 {
             font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
         }
         
         /* Styles for the auto-scrolling product track */
@@ -68,12 +69,6 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        // UPDATED: 'sans' now defaults to Poppins
-                        sans: ['Poppins', 'sans-serif'],
-                        // NEW: Added a dedicated 'display' font family for major, friendly elements
-                        display: ['Quicksand', 'sans-serif'], 
-                    },
                     colors: {
                         'charcoal': '#2C3E50',
                         'teal-accent': '#1ABC9C',
@@ -83,39 +78,56 @@
             }
         }
 
-        // --- PRODUCT DATA (Expanded and tagged for Top Selling / New Arrivals) ---
+        // --- PRODUCT DATA (Expanded, BDT currency) ---
         const productData = [
-            // isTopSelling: true (3 items)
+            // --- Top Selling (3 Items) ---
             { id: 1, name: "Matador i-teen Gel Pen (6-Pack)", category: "Stationery", price: 72, discount: 61, off: 15, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Matador+Pen" },
             { id: 4, name: "Minimalist Silver Stud Earrings", category: "Girls Hub", price: 199, discount: 169, off: 15, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Earrings" },
             { id: 8, name: "Water-Resistant Laptop Backpack", category: "Bags", price: 1800, discount: 1440, off: 20, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Backpack" },
 
-            // isNewArrival: true (3 items)
+            // --- New Arrivals (3 Items) ---
             { id: 13, name: "Pastel Gel Ink Pen Set", category: "Girls Hub", price: 250, discount: 200, off: 20, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Pastel+Pens" },
             { id: 16, name: "Multi-Tool Keychain (Student Edition)", category: "Boys Hub", price: 140, discount: 112, off: 20, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Multi-Tool" },
             { id: 20, name: "Minimalist Sling Bag", category: "Bags", price: 600, discount: 510, off: 15, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Sling+Bag" },
 
-            // --- Stationery (Remaining items) ---
+            // --- Stationery (7+ total products) ---
             { id: 2, name: "A4 Notebook (200 Pages)", category: "Stationery", price: 120, discount: 108, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=A4+Notebook" },
             { id: 3, name: "Faber-Castell 2B Pencil Set", category: "Stationery", price: 90, discount: 72, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Pencil+Set" },
             { id: 11, name: "Scientific Calculator (FX-991)", category: "Stationery", price: 950, discount: 855, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Calculator" },
             { id: 12, name: "Highlight Marker Set (6 Colors)", category: "Stationery", price: 180, discount: 144, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Markers" },
+            { id: 21, name: "Lamy-Style Fountain Pen (Budget)", category: "Stationery", price: 380, discount: 342, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Fountain+Pen" },
+            { id: 22, name: "White Correction Pen Set (3 PCS)", category: "Stationery", price: 110, discount: 99, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Correction+Pen" },
+            { id: 23, name: "PVC Clear Book Cover Rolls", category: "Stationery", price: 150, discount: 120, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Book+Covers" },
 
-            // --- Girls Hub (Remaining items) ---
+
+            // --- Girls Hub (7+ total products) ---
             { id: 5, name: "Aesthetic Spiral Planner (2025)", category: "Girls Hub", price: 350, discount: 280, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Planner" },
             { id: 14, name: "Hair Scrunchie Pack (10 PCS)", category: "Girls Hub", price: 150, discount: 120, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Scrunchies" },
             { id: 15, name: "Compact Makeup Mirror", category: "Girls Hub", price: 99, discount: 84, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Mirror" },
+            { id: 24, name: "Cute Animal Eraser Set (5 PCS)", category: "Girls Hub", price: 80, discount: 64, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Eraser+Set" },
+            { id: 25, name: "Kawaii Bear Sticky Notes Set", category: "Girls Hub", price: 170, discount: 153, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Sticky+Notes" },
+            { id: 26, name: "Multi-Color Cable Organizers (5-Pack)", category: "Girls Hub", price: 130, discount: 117, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Cable+Ties" },
+            { id: 27, name: "Pastel Color Metal Water Bottle (500ml)", category: "Girls Hub", price: 499, discount: 424, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Water+Bottle" },
+            
 
-            // --- Boys Hub (Remaining items) ---
+            // --- Boys Hub (7+ total products) ---
             { id: 6, name: "32GB USB 3.0 Flash Drive", category: "Boys Hub", price: 550, discount: 495, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Flash+Drive" },
             { id: 7, name: "Minimalist Bi-Fold Wallet (Black)", category: "Boys Hub", price: 280, discount: 238, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Wallet" },
             { id: 17, name: "Wired Gaming Mouse (Budget)", category: "Boys Hub", price: 450, discount: 382, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Mouse" },
             { id: 18, name: "Premium Phone Stand", category: "Boys Hub", price: 199, discount: 179, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Phone+Stand" },
+            { id: 28, name: "10000mAh Power Bank (Compact)", category: "Boys Hub", price: 1250, discount: 1125, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Power+Bank" },
+            { id: 29, name: "USB-C to USB-A Adapter (2-Pack)", category: "Boys Hub", price: 290, discount: 246, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=USB+Adapter" },
+            { id: 30, name: "Durable Headphone Case (Hard Shell)", category: "Boys Hub", price: 320, discount: 272, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Headphone+Case" },
 
-            // --- Bags (Remaining items) ---
+
+            // --- Bags (7+ total products) ---
             { id: 9, name: "Canvas Tote Bag (Large)", category: "Bags", price: 390, discount: 330, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Tote+Bag" },
             { id: 10, name: "Mesh Pencil Pouch (Zipper)", category: "Bags", price: 150, discount: 135, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Pouch" },
             { id: 19, name: "Drawstring Gym Bag", category: "Bags", price: 250, discount: 200, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Gym+Bag" },
+            { id: 31, name: "Premium Pencil Box (Hard Shell)", category: "Bags", price: 420, discount: 357, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Pencil+Box" },
+            { id: 32, name: "Folding Shopping Bag (Reusable)", category: "Bags", price: 100, discount: 85, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Shopping+Bag" },
+            { id: 33, name: "Laptop Sleeve (14-inch, Grey)", category: "Bags", price: 750, discount: 675, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Laptop+Sleeve" },
+            { id: 34, name: "Crossbody Small Day Bag", category: "Bags", price: 490, discount: 441, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Crossbody+Bag" },
         ];
         
         // --- CORE PAGE ROUTING LOGIC ---
@@ -154,7 +166,7 @@
             } else if (pageId === 'boys-hub-page') {
                 renderCategoryPage('Boys Hub', 'Boys Hub');
             } else if (pageId === 'bags-page') {
-                renderCategoryPage('Bags', 'Bags');
+                renderCategoryPage('Bags', 'Bags & Backpacks');
             }
             
             // Close mobile menu if open
@@ -216,7 +228,7 @@
         }
 
         // Renders all products for a specific category page
-        function renderCategoryPage(category, containerId) {
+        function renderCategoryPage(category) {
             const container = document.getElementById(category.toLowerCase().replace(/\s/g, '-') + '-products');
             if (!container) return;
 
@@ -229,7 +241,6 @@
             }
 
             // Render products in a grid layout
-            // Note: Grid uses the default mobile-friendly column count and expands on larger screens
             container.innerHTML = filteredProducts.map(product => renderProductCard(product, false)).join('');
         }
 
@@ -247,8 +258,9 @@
                     <h3 class="text-lg font-semibold text-charcoal mb-2 truncate">${product.name}</h3>
                     
                     <div class="pricing flex items-center mb-4">
+                        <!-- BDT currency symbol (৳) -->
                         <span class="original-price text-sm text-gray-400 line-through mr-3">৳ ${product.price}</span>
-                        <span class="discount-price text-2xl font-bold text-teal-accent">৳ ${product.discount}</span>
+                        <span class="discount-price text-2xl font-extrabold text-teal-accent">৳ ${product.discount}</span>
                         <span class="ml-auto text-xs font-bold bg-red-100 text-red-600 px-2 py-0.5 rounded-full">${product.off}% OFF</span>
                     </div>
                     
@@ -266,6 +278,7 @@
             const messageBox = document.getElementById('message-box');
             const messageText = document.getElementById('message-text');
 
+            // Using BDT currency symbol (৳)
             messageText.innerHTML = `<span class="font-bold">${productName}</span> added to cart! Total: ৳ ${price}.<br>Next: <span class="text-teal-accent font-bold">SSLCommerz Payment Gateway</span> integration.`;
             messageBox.classList.remove('hidden');
             
@@ -348,10 +361,15 @@
             <div class="flex justify-between items-center h-16">
                 
                 <!-- 1. LEFT SIDE: Logo/Brand Name -->
-                <!-- UPDATED: Added font-display class to use Quicksand for the logo -->
-                <div class="flex-shrink-0 flex items-center font-display">
-                    <span class="text-2xl font-extrabold text-teal-accent mr-1">R</span>
-                    <span class="text-xl font-bold">RajHub</span>
+                <div class="flex-shrink-0 flex items-center font-extrabold text-2xl">
+                    <!-- R in Teal -->
+                    <span class="text-teal-accent">R</span>
+                    <!-- aj in White (Against the charcoal background) -->
+                    <span class="text-white">aj</span>
+                    <!-- H in Teal -->
+                    <span class="text-teal-accent">H</span>
+                    <!-- ub in White -->
+                    <span class="text-white">ub</span>
                 </div>
 
                 <!-- 2. RIGHT SIDE: Others (Navigation Links, Icons, and Mobile Menu Toggle) -->
@@ -421,11 +439,10 @@
 
                 <!-- 2. Text Block -->
                 <div class="p-6 sm:p-10 text-center">
-                    <!-- Note: The font is automatically applied via the H1 CSS rule -->
                     <h1 class="text-3xl sm:text-5xl font-extrabold text-charcoal mb-3 leading-tight">
                         Students Friendly Hub In Rajshahi
                     </h1>
-                    <p class="text-base sm:text-xl text-gray-600 mb-6">Premium Essentials for a Minimal Price</p>
+                    <p class="text-base sm:text-xl text-gray-600 mb-6">Premium Essentials for a Minimal Price. Guaranteed Student Savings!</p>
                     <a href="#top-selling-products-strip" class="px-6 py-3 bg-teal-accent text-white font-bold rounded-full shadow-lg hover:bg-[#158C7C] transition duration-200 uppercase text-sm sm:text-base">
                         View Top Selling Deals
                     </a>
@@ -434,10 +451,9 @@
             
             <!-- --- FEATURED CAROUSELS --- -->
 
-            <!-- 1. TOP SELLING STRIP -->
+            <!-- 1. TOP SELLING STRIP (Clean Caption) -->
             <section id="top-selling-products-strip" class="mb-12 relative">
-                <!-- Note: The font is automatically applied via the H2 CSS rule -->
-                <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-red-500 pb-2">🔥 Top Selling</h2>
+                <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-teal-accent pb-2">Top Selling</h2>
 
                 <!-- Navigation Buttons (Hidden on small screens to rely on touch scroll) -->
                 <div class="absolute top-1/2 -left-3 transform -translate-y-1/2 z-10 hidden md:block">
@@ -457,9 +473,9 @@
                 </div>
             </section>
             
-            <!-- 2. NEW ARRIVALS STRIP -->
+            <!-- 2. NEW ARRIVALS STRIP (Clean Caption) -->
             <section id="new-arrivals-products-strip" class="mb-12 relative">
-                <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-teal-accent pb-2">✨ New Arrivals</h2>
+                <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-teal-accent pb-2">New Arrivals</h2>
 
                 <!-- Navigation Buttons -->
                 <div class="absolute top-1/2 -left-3 transform -translate-y-1/2 z-10 hidden md:block">
@@ -479,7 +495,7 @@
                 </div>
             </section>
 
-            <!-- --- CATEGORY CAROUSELS --- -->
+            <!-- --- CATEGORY CAROUSELS (Consistent Caption Style) --- -->
 
             <!-- 3. STATIONERY HUB STRIP -->
             <section id="stationary-products-strip" class="mb-12 relative">
@@ -505,7 +521,7 @@
             
             <!-- 4. GIRLS HUB STRIP -->
             <section id="girls-hub-products-strip" class="mb-12 relative">
-                <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-[#E91E63] pb-2">Girls Hub</h2>
+                <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-teal-accent pb-2">Girls Hub</h2>
 
                 <!-- Navigation Buttons -->
                 <div class="absolute top-1/2 -left-3 transform -translate-y-1/2 z-10 hidden md:block">
@@ -527,7 +543,7 @@
 
             <!-- 5. BOYS HUB STRIP -->
             <section id="boys-hub-products-strip" class="mb-12 relative">
-                <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-[#3498DB] pb-2">Boys Hub</h2>
+                <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-teal-accent pb-2">Boys Hub</h2>
 
                 <!-- Navigation Buttons -->
                 <div class="absolute top-1/2 -left-3 transform -translate-y-1/2 z-10 hidden md:block">
@@ -549,8 +565,8 @@
 
             <!-- 6. BAGS STRIP -->
             <section id="bags-products-strip" class="mb-12 relative">
-                <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-[#E67E22] pb-2">Bags & Backpacks</h2>
-
+                <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-teal-accent pb-2">Bags & Backpacks</h2>
+                
                 <!-- Navigation Buttons -->
                 <div class="absolute top-1/2 -left-3 transform -translate-y-1/2 z-10 hidden md:block">
                     <button onclick="scrollCarousel('bags-carousel-track', 'prev')" class="p-3 bg-white rounded-full shadow-lg text-charcoal hover:bg-light-gray transition duration-200">
@@ -586,7 +602,7 @@
         <!-- 3. GIRLS HUB PAGE VIEW -->
         <!-- ============================================== -->
         <section id="girls-hub-page" class="content-page hidden min-h-[60vh]">
-            <h1 class="text-3xl font-bold text-charcoal mb-8 border-b-2 border-[#E91E63] pb-2">Girls Hub</h1>
+            <h1 class="text-3xl font-bold text-charcoal mb-8 border-b-2 border-teal-accent pb-2">Girls Hub: Style & Organization</h1>
             <p class="mb-6 text-gray-600">Minimalist accessories, aesthetic planners, and stylish gear to complement your campus look.</p>
             <div id="girls-hub-products" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Girls Hub products will be rendered here by renderCategoryPage() -->
@@ -597,7 +613,7 @@
         <!-- 4. BOYS HUB PAGE VIEW -->
         <!-- ============================================== -->
         <section id="boys-hub-page" class="content-page hidden min-h-[60vh]">
-            <h1 class="text-3xl font-bold text-charcoal mb-8 border-b-2 border-[#3498DB] pb-2">Boys Hub</h1>
+            <h1 class="text-3xl font-bold text-charcoal mb-8 border-b-2 border-teal-accent pb-2">Boys Hub: Tech & Utility</h1>
             <p class="mb-6 text-gray-600">Durable storage, essential tech gadgets, and tools built for engineering and science students.</p>
             <div id="boys-hub-products" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Boys Hub products will be rendered here by renderCategoryPage() -->
@@ -608,7 +624,8 @@
         <!-- 5. BAGS PAGE VIEW -->
         <!-- ============================================== -->
         <section id="bags-page" class="content-page hidden min-h-[60vh]">
-            <h1 class="text-3xl font-bold text-charcoal mb-8 border-b-2 border-[#E67E22] pb-2">Bags & Backpacks</h1>
+            <!-- FIX: Changed border-[#E67E22] to border-teal-accent for theme consistency -->
+            <h1 class="text-3xl font-bold text-charcoal mb-8 border-b-2 border-teal-accent pb-2">Bags & Backpacks</h1>
             <p class="mb-6 text-gray-600">Water-resistant backpacks and simple totes designed to carry laptops and study material safely.</p>
             <div id="bags-products" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Bags products will be rendered here by renderCategoryPage() -->
@@ -630,4 +647,3 @@
 
 </body>
 </html>
-
