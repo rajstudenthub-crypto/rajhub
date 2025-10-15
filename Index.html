@@ -38,24 +38,26 @@
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch; 
             padding-bottom: 1rem;
-            /* MOBILE/TABLET: Adjust padding to accommodate 2 cards better */
+            /* MOBILE/TABLET: Adjust padding to accommodate the new card width */
             padding-left: 0.5rem; 
             padding-right: 0.5rem;
         }
         .product-card {
-            /* MOBILE/TABLET: Show 2 cards at once (50% - margin) */
-            flex: 0 0 calc(50% - 8px); 
+            /* ADJUSTED WIDTH: From 50% to 40% - makes the cards narrower/taller */
+            flex: 0 0 calc(40% - 8px); 
             max-width: none;
             scroll-snap-align: start;
             margin-right: 1rem;
-            margin-left: 0.5rem; /* Small margin to balance padding on track */
+            margin-left: 0.5rem; 
         }
-        /* DESKTOP: Show 3 cards at once */
+        /* DESKTOP: Adjust to show more items, making cards narrower */
         @media (min-width: 768px) {
             .product-card {
-                flex: 0 0 30%; 
-                max-width: 280px;
-                margin-left: 0; /* Adjust for desktop grid/carousel appearance */
+                /* Reduced from 30% to 28% for narrower feel */
+                flex: 0 0 28%; 
+                /* Reduced max-width from 280px to 260px */
+                max-width: 260px;
+                margin-left: 0; 
             }
             .product-track {
                 padding-left: 0;
@@ -81,63 +83,65 @@
                         'charcoal': '#2C3E50',
                         'teal-accent': '#1ABC9C',
                         'light-gray': '#F4F4F4',
+                        // Light red/salmon color for the button
+                        'salmon-accent': '#FF6B6B', 
                     }
                 }
             }
         }
 
-        // --- PRODUCT DATA (Expanded, BDT currency) ---
+        // --- PRODUCT DATA (Updated: Discount and Off removed, final price set as 'price') ---
         const productData = [
             // --- Top Selling (6 Items: ids 1, 4, 8, 2, 5, 6) ---
-            { id: 1, name: "Matador i-teen Gel Pen (6-Pack)", category: "Stationery", price: 72, discount: 61, off: 15, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Matador+Pen" },
-            { id: 4, name: "Minimalist Silver Stud Earrings", category: "Girls Hub", price: 199, discount: 169, off: 15, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Earrings" },
-            { id: 8, name: "Water-Resistant Laptop Backpack", category: "Bags", price: 1800, discount: 1440, off: 20, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Backpack" },
-            { id: 2, name: "A4 Notebook (200 Pages)", category: "Stationery", price: 120, discount: 108, off: 10, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=A4+Notebook" },
-            { id: 5, name: "Aesthetic Spiral Planner (2025)", category: "Girls Hub", price: 350, discount: 280, off: 20, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Planner" },
-            { id: 6, name: "32GB USB 3.0 Flash Drive", category: "Boys Hub", price: 550, discount: 495, off: 10, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Flash+Drive" },
+            { id: 1, name: "Matador i-teen Gel Pen (6-Pack)", category: "Stationery", price: 61, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Matador+Pen" },
+            { id: 4, name: "Minimalist Silver Stud Earrings", category: "Girls Hub", price: 169, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Earrings" },
+            { id: 8, name: "Water-Resistant Laptop Backpack", category: "Bags", price: 1440, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Backpack" },
+            { id: 2, name: "A4 Notebook (200 Pages)", category: "Stationery", price: 108, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=A4+Notebook" },
+            { id: 5, name: "Aesthetic Spiral Planner (2025)", category: "Girls Hub", price: 280, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Planner" },
+            { id: 6, name: "32GB USB 3.0 Flash Drive", category: "Boys Hub", price: 495, isTopSelling: true, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Flash+Drive" },
 
 
             // --- New Arrivals (6 Items: ids 13, 16, 20, 9, 10, 11) ---
-            { id: 13, name: "Pastel Gel Ink Pen Set", category: "Girls Hub", price: 250, discount: 200, off: 20, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Pastel+Pens" },
-            { id: 16, name: "Multi-Tool Keychain (Student Edition)", category: "Boys Hub", price: 140, discount: 112, off: 20, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Multi-Tool" },
-            { id: 20, name: "Minimalist Sling Bag", category: "Bags", price: 600, discount: 510, off: 15, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Sling+Bag" },
-            { id: 9, name: "Canvas Tote Bag (Large)", category: "Bags", price: 390, discount: 330, off: 15, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Tote+Bag" },
-            { id: 10, name: "Mesh Pencil Pouch (Zipper)", category: "Bags", price: 150, discount: 135, off: 10, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Pouch" },
-            { id: 11, name: "Scientific Calculator (FX-991)", category: "Stationery", price: 950, discount: 855, off: 10, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Calculator" },
+            { id: 13, name: "Pastel Gel Ink Pen Set", category: "Girls Hub", price: 200, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Pastel+Pens" },
+            { id: 16, name: "Multi-Tool Keychain (Student Edition)", category: "Boys Hub", price: 112, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Multi-Tool" },
+            { id: 20, name: "Minimalist Sling Bag", category: "Bags", price: 510, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Sling+Bag" },
+            { id: 9, name: "Canvas Tote Bag (Large)", category: "Bags", price: 330, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Tote+Bag" },
+            { id: 10, name: "Mesh Pencil Pouch (Zipper)", category: "Bags", price: 135, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Pouch" },
+            { id: 11, name: "Scientific Calculator (FX-991)", category: "Stationery", price: 855, isTopSelling: false, isNewArrival: true, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Calculator" },
 
 
             // --- Stationery (Remaining items only) ---
-            { id: 3, name: "Faber-Castell 2B Pencil Set", category: "Stationery", price: 90, discount: 72, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Pencil+Set" },
-            { id: 12, name: "Highlight Marker Set (6 Colors)", category: "Stationery", price: 180, discount: 144, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Markers" },
-            { id: 21, name: "Lamy-Style Fountain Pen (Budget)", category: "Stationery", price: 380, discount: 342, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Fountain+Pen" },
-            { id: 22, name: "White Correction Pen Set (3 PCS)", category: "Stationery", price: 110, discount: 99, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Correction+Pen" },
-            { id: 23, name: "PVC Clear Book Cover Rolls", category: "Stationery", price: 150, discount: 120, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Book+Covers" },
+            { id: 3, name: "Faber-Castell 2B Pencil Set", category: "Stationery", price: 72, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Pencil+Set" },
+            { id: 12, name: "Highlight Marker Set (6 Colors)", category: "Stationery", price: 144, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Markers" },
+            { id: 21, name: "Lamy-Style Fountain Pen (Budget)", category: "Stationery", price: 342, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Fountain+Pen" },
+            { id: 22, name: "White Correction Pen Set (3 PCS)", category: "Stationery", price: 99, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Correction+Pen" },
+            { id: 23, name: "PVC Clear Book Cover Rolls", category: "Stationery", price: 120, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Book+Covers" },
 
 
             // --- Girls Hub (Remaining items only) ---
-            { id: 14, name: "Hair Scrunchie Pack (10 PCS)", category: "Girls Hub", price: 150, discount: 120, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Scrunchies" },
-            { id: 15, name: "Compact Makeup Mirror", category: "Girls Hub", price: 99, discount: 84, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Mirror" },
-            { id: 24, name: "Cute Animal Eraser Set (5 PCS)", category: "Girls Hub", price: 80, discount: 64, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Eraser+Set" },
-            { id: 25, name: "Kawaii Bear Sticky Notes Set", category: "Girls Hub", price: 170, discount: 153, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Sticky+Notes" },
-            { id: 26, name: "Multi-Color Cable Organizers (5-Pack)", category: "Girls Hub", price: 130, discount: 117, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Cable+Ties" },
-            { id: 27, name: "Pastel Color Metal Water Bottle (500ml)", category: "Girls Hub", price: 499, discount: 424, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Water+Bottle" },
+            { id: 14, name: "Hair Scrunchie Pack (10 PCS)", category: "Girls Hub", price: 120, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Scrunchies" },
+            { id: 15, name: "Compact Makeup Mirror", category: "Girls Hub", price: 84, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Mirror" },
+            { id: 24, name: "Cute Animal Eraser Set (5 PCS)", category: "Girls Hub", price: 64, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Eraser+Set" },
+            { id: 25, name: "Kawaii Bear Sticky Notes Set", category: "Girls Hub", price: 153, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Sticky+Notes" },
+            { id: 26, name: "Multi-Color Cable Organizers (5-Pack)", category: "Girls Hub", price: 117, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Cable+Ties" },
+            { id: 27, name: "Pastel Color Metal Water Bottle (500ml)", category: "Girls Hub", price: 424, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Water+Bottle" },
             
 
             // --- Boys Hub (Remaining items only) ---
-            { id: 7, name: "Minimalist Bi-Fold Wallet (Black)", category: "Boys Hub", price: 280, discount: 238, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Wallet" },
-            { id: 17, name: "Wired Gaming Mouse (Budget)", category: "Boys Hub", price: 450, discount: 382, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Mouse" },
-            { id: 18, name: "Premium Phone Stand", category: "Boys Hub", price: 199, discount: 179, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Phone+Stand" },
-            { id: 28, name: "10000mAh Power Bank (Compact)", category: "Boys Hub", price: 1250, discount: 1125, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Power+Bank" },
-            { id: 29, name: "USB-C to USB-A Adapter (2-Pack)", category: "Boys Hub", price: 290, discount: 246, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=USB+Adapter" },
-            { id: 30, name: "Durable Headphone Case (Hard Shell)", category: "Boys Hub", price: 320, discount: 272, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Headphone+Case" },
+            { id: 7, name: "Minimalist Bi-Fold Wallet (Black)", category: "Boys Hub", price: 238, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Wallet" },
+            { id: 17, name: "Wired Gaming Mouse (Budget)", category: "Boys Hub", price: 382, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Mouse" },
+            { id: 18, name: "Premium Phone Stand", category: "Boys Hub", price: 179, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Phone+Stand" },
+            { id: 28, name: "10000mAh Power Bank (Compact)", category: "Boys Hub", price: 1125, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Power+Bank" },
+            { id: 29, name: "USB-C to USB-A Adapter (2-Pack)", category: "Boys Hub", price: 246, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=USB+Adapter" },
+            { id: 30, name: "Durable Headphone Case (Hard Shell)", category: "Boys Hub", price: 272, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Headphone+Case" },
 
 
             // --- Bags (Remaining items only) ---
-            { id: 19, name: "Drawstring Gym Bag", category: "Bags", price: 250, discount: 200, off: 20, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Gym+Bag" },
-            { id: 31, name: "Premium Pencil Box (Hard Shell)", category: "Bags", price: 420, discount: 357, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Pencil+Box" },
-            { id: 32, name: "Folding Shopping Bag (Reusable)", category: "Bags", price: 100, discount: 85, off: 15, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Shopping+Bag" },
-            { id: 33, name: "Laptop Sleeve (14-inch, Grey)", category: "Bags", price: 750, discount: 675, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Laptop+Sleeve" },
-            { id: 34, name: "Crossbody Small Day Bag", category: "Bags", price: 490, discount: 441, off: 10, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Crossbody+Bag" },
+            { id: 19, name: "Drawstring Gym Bag", category: "Bags", price: 200, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Gym+Bag" },
+            { id: 31, name: "Premium Pencil Box (Hard Shell)", category: "Bags", price: 357, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Pencil+Box" },
+            { id: 32, name: "Folding Shopping Bag (Reusable)", category: "Bags", price: 85, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Shopping+Bag" },
+            { id: 33, name: "Laptop Sleeve (14-inch, Grey)", category: "Bags", price: 675, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Laptop+Sleeve" },
+            { id: 34, name: "Crossbody Small Day Bag", category: "Bags", price: 441, isTopSelling: false, isNewArrival: false, imageUrl: "https://placehold.co/300x200/F4F4F4/2C3E50?text=Crossbody+Bag" },
         ];
         
         // --- CORE PAGE ROUTING LOGIC ---
@@ -263,20 +267,24 @@
             
             return `
                 <div class="${cardClass}">
-                    <img src="${product.imageUrl}" alt="${product.name}" class="w-full h-36 object-cover rounded-md mb-3" onerror="this.onerror=null;this.src='https://placehold.co/300x200/E5E7EB/4B5563?text=Image+Missing';">
+                    <!-- IMAGE HEIGHT INCREASED FROM h-36 to h-44 for a taller card look -->
+                    <img src="${product.imageUrl}" alt="${product.name}" class="w-full h-44 object-cover rounded-md mb-3" onerror="this.onerror=null;this.src='https://placehold.co/300x200/E5E7EB/4B5563?text=Image+Missing';">
                     <p class="text-xs text-gray-500 mb-1">${product.category}</p>
                     <h3 class="text-lg font-semibold text-charcoal mb-2 truncate">${product.name}</h3>
                     
-                    <div class="pricing flex items-center mb-4">
-                        <!-- BDT currency symbol (৳) -->
-                        <span class="original-price text-sm text-gray-400 line-through mr-3">৳ ${product.price}</span>
-                        <span class="discount-price text-2xl font-extrabold text-teal-accent">৳ ${product.discount}</span>
-                        <span class="ml-auto text-xs font-bold bg-red-100 text-red-600 px-2 py-0.5 rounded-full">${product.off}% OFF</span>
+                    <!-- NEW LAYOUT: Price on Left, Button on Right -->
+                    <div class="flex justify-between items-center mb-0 space-x-2">
+                        <!-- Price on Left -->
+                        <div class="text-left flex-shrink-0">
+                            <!-- BDT currency symbol (৳) -->
+                            <span class="final-price text-2xl font-extrabold text-teal-accent">৳ ${product.price}</span>
+                        </div>
+                        
+                        <!-- Button on Right (Smaller, Light Red/Salmon) -->
+                        <button onclick="handleKinunClick(${product.id})" class="kinun-button flex-shrink-0 px-4 py-2 bg-salmon-accent text-white text-sm rounded-full font-bold hover:bg-red-500 transition duration-200 shadow-md">
+                            Order Now
+                        </button>
                     </div>
-                    
-                    <button onclick="handleKinunClick(${product.id})" class="kinun-button w-full bg-teal-accent text-white py-2 rounded-full font-medium hover:bg-[#158C7C] transition duration-200 shadow-md">
-                        Order Now
-                    </button>
                 </div>
             `;
         }
@@ -293,10 +301,10 @@
 
             currentCheckoutProduct = product;
             
-            // Populate modal with product info
+            // Populate modal with product info - using product.price now
             document.getElementById('checkout-product-title').textContent = product.name;
-            document.getElementById('checkout-product-price').textContent = `৳ ${product.discount}`;
-            document.getElementById('checkout-total-price').textContent = `৳ ${product.discount}`;
+            document.getElementById('checkout-product-price').textContent = `৳ ${product.price}`;
+            document.getElementById('checkout-total-price').textContent = `৳ ${product.price}`;
             document.getElementById('product-image-modal').src = product.imageUrl;
             
             // Show the modal and prevent background scrolling
@@ -334,11 +342,11 @@
 
             const product = currentCheckoutProduct;
 
-            // Prepare the confirmation message details
+            // Prepare the confirmation message details - using product.price now
             const confirmationDetails = `
                 <div class="text-left space-y-2 text-gray-700">
                     <p><strong>Item:</strong> ${product.name}</p>
-                    <p><strong>Total Price:</strong> <span class="text-teal-accent font-bold">৳ ${product.discount}</span></p>
+                    <p><strong>Total Price:</strong> <span class="text-teal-accent font-bold">৳ ${product.price}</span></p>
                     <p><strong>Name:</strong> ${name}</p>
                     <p><strong>Phone:</strong> ${phone}</p>
                     <p><strong>Address:</strong> ${address}</p>
@@ -403,7 +411,7 @@
                 const firstCard = track.querySelector('.product-card');
                 if (!firstCard) return;
 
-                const itemWidth = firstCard.offsetWidth + 16; // Card width + margin-right
+                const itemWidth = firstCard.offsetWidth + 16; // Card width + margin-right (1rem = 16px)
                 const currentScroll = track.scrollLeft;
                 const maxScroll = track.scrollWidth - track.clientWidth;
                 
@@ -436,8 +444,6 @@
     </script>
 </head>
 <body class="bg-white text-gray-800 font-sans min-h-screen flex flex-col">
-
-    <!-- REMOVED OLD MESSAGE BOX (Alert replacement) -->
 
     <!-- HEADER (Navigation) -->
     <header class="header-charcoal text-white shadow-lg sticky top-0 z-40">
@@ -674,12 +680,11 @@
 
         <!-- ============================================== -->
         <!-- 2. CATEGORY PAGES VIEW (Simplified for brevity) -->
-        <!-- NOTE: Grid adjusted to ensure 2 products visible on mobile/small screens -->
         <!-- ============================================== -->
         <section id="stationary-page" class="content-page hidden min-h-[60vh]">
             <h1 class="text-3xl font-bold text-charcoal mb-8 border-b-2 border-teal-accent pb-2">Stationery Essentials</h1>
             <p class="mb-6 text-gray-600">High-quality pens, notebooks, and academic tools for focused study sessions across Rajshahi.</p>
-            <!-- UPDATED GRID: grid-cols-2 is the default for mobile, md:grid-cols-3 for tablets, lg:grid-cols-4 for desktop -->
+            <!-- Grid layout is maintained -->
             <div id="stationary-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Stationery products will be rendered here by renderCategoryPage() -->
             </div>
@@ -688,7 +693,7 @@
         <section id="girls-hub-page" class="content-page hidden min-h-[60vh]">
             <h1 class="text-3xl font-bold text-charcoal mb-8 border-b-2 border-teal-accent pb-2">Girls Hub: Style & Organization</h1>
             <p class="mb-6 text-gray-600">Minimalist accessories, aesthetic planners, and stylish gear to complement your campus look.</p>
-            <!-- UPDATED GRID -->
+            <!-- Grid layout is maintained -->
             <div id="girls-hub-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Girls Hub products will be rendered here by renderCategoryPage() -->
             </div>
@@ -697,7 +702,7 @@
         <section id="boys-hub-page" class="content-page hidden min-h-[60vh]">
             <h1 class="text-3xl font-bold text-charcoal mb-8 border-b-2 border-teal-accent pb-2">Boys Hub: Tech & Utility</h1>
             <p class="mb-6 text-gray-600">Durable storage, essential tech gadgets, and tools built for engineering and science students.</p>
-            <!-- UPDATED GRID -->
+            <!-- Grid layout is maintained -->
             <div id="boys-hub-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Boys Hub products will be rendered here by renderCategoryPage() -->
             </div>
@@ -706,7 +711,7 @@
         <section id="bags-page" class="content-page hidden min-h-[60vh]">
             <h1 class="text-3xl font-bold text-charcoal mb-8 border-b-2 border-teal-accent pb-2">Bags & Backpacks</h1>
             <p class="mb-6 text-gray-600">Water-resistant backpacks and simple totes designed to carry laptops and study material safely.</p>
-            <!-- UPDATED GRID -->
+            <!-- Grid layout is maintained -->
             <div id="bags-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Bags products will be rendered here by renderCategoryPage() -->
             </div>
