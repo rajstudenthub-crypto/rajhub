@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- ADDED: Google Fonts CDN for Quicksand (Rounded Font) -->
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <style>
         /* Custom styles for the minimal, premium look */
@@ -20,14 +20,19 @@
         body, button, input, textarea, select, h1, h2, h3, a {
             font-family: 'Quicksand', sans-serif !important; 
         }
+        /* Increased font weight mapping for Quicksand */
+        h1, h2, h3, .font-black {
+            font-weight: 900 !important; /* Use the highest weight for font-black */
+        }
+        .font-extrabold {
+            font-weight: 700 !important;
+        }
+        
         body {
             background-color: #f8fafc; /* Tailwind gray-50 */
             transition: background-color 0.3s;
         }
-        h1, h2, h3 {
-            font-weight: 700 !important;
-        }
-        
+
         /* Styles for the auto-scrolling product track (Applies to all carousels on desktop) */
         .product-track {
             display: flex;
@@ -81,7 +86,7 @@
                         'charcoal': '#2C3E50',
                         'teal-accent': '#1ABC9C',
                         'light-gray': '#F4F4F4',
-                        'salmon-accent': '#FF6B6B', 
+                        'salmon-accent': '#FF6B6B', // The eye-catching color for price
                     }
                 }
             }
@@ -208,9 +213,9 @@
                 if (products.length > 1) {
                     html += `
                         <div class="text-center mt-6">
-                            <!-- UPDATED: Background color changed from salmon-accent to bg-teal-accent -->
+                            <!-- UPDATED: Background color changed to Light Gray for minimal look -->
                             <button onclick="toggleCategoryView('${category}', '${containerId}')" 
-                                class="px-6 py-3 bg-teal-accent text-white font-bold rounded-full shadow-lg hover:bg-[#158C7C] transition duration-200 uppercase text-sm">
+                                class="px-6 py-3 bg-light-gray text-charcoal border border-gray-300 font-bold rounded-full shadow-sm hover:bg-gray-200 transition duration-200 uppercase text-sm">
                                 See ${totalRemaining} More Products
                             </button>
                         </div>
@@ -319,14 +324,14 @@
                     
                     <!-- 
                         UPDATED FOR MINIMALIST MOBILE LOOK:
-                        - Price is now Charcoal and slightly bolder.
-                        - Button is now Teal, uses a cleaner rounded-lg shape, and has better padding/font-size (text-sm) for touch.
+                        - Price is now Salmon-Accent, max bold (font-black), and larger (text-2xl).
+                        - Button uses the Teal accent for the CTA.
                     -->
                     <div class="flex justify-between items-center">
                         <!-- Price on Left -->
                         <div class="text-left flex-shrink-0">
-                            <!-- Changed color from text-teal-accent to text-charcoal for cleaner look -->
-                            <span class="final-price text-xl font-bold text-charcoal">৳ ${product.price}</span>
+                            <!-- !!! UPDATED: Color to salmon-accent, size to text-2xl, weight to font-black !!! -->
+                            <span class="final-price text-2xl font-black text-salmon-accent">৳ ${product.price}</span>
                         </div>
                         
                         <!-- Button on Right -->
