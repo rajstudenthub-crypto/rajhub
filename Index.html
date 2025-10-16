@@ -77,6 +77,10 @@
             background-color: rgba(0, 0, 0, 0.75);
             transition: opacity 0.3s ease-out;
         }
+        /* Utility class for the toggled element transition */
+        .rotate-90 {
+            transform: rotate(90deg);
+        }
     </style>
     <script>
         tailwind.config = {
@@ -346,6 +350,18 @@
         
         // --- CHECKOUT LOGIC ---
 
+        // Function to toggle the payment section visibility and arrow icon
+        function togglePaymentSection() {
+            const content = document.getElementById('payment-method-content');
+            const icon = document.getElementById('payment-toggle-icon');
+
+            // Toggle the hidden class
+            content.classList.toggle('hidden');
+            
+            // Toggle the rotation class for the icon
+            icon.classList.toggle('rotate-90');
+        }
+
         // Function for the 'Order Now' button tap
         function handleKinunClick(productId) {
             const product = productData.find(p => p.id === productId);
@@ -369,6 +385,16 @@
             // Ensure the form content is visible (in case a confirmation message was shown previously)
             document.getElementById('modal-content-form').classList.remove('hidden');
             document.getElementById('modal-content-confirmation').classList.add('hidden');
+            
+            // Reset form visibility: 
+            // 1. Ensure payment method content is hidden
+            const paymentContent = document.getElementById('payment-method-content');
+            if (!paymentContent.classList.contains('hidden')) {
+                paymentContent.classList.add('hidden');
+            }
+            // 2. Ensure payment icon is reset (pointing right/0deg)
+            document.getElementById('payment-toggle-icon').classList.remove('rotate-90');
+
         }
 
         function closeCheckoutModal() {
@@ -389,7 +415,7 @@
 
             // Simple validation
             if (!name || !phone || !address || !paymentMethod) {
-                document.getElementById('form-error').textContent = "Please fill in all details and select a payment method.";
+                document.getElementById('form-error').textContent = "অনুগ্রহ করে সকল তথ্য পূরণ করুন এবং একটি পেমেন্ট পদ্ধতি নির্বাচন করুন। (Please fill in all details and select a payment method.)";
                 document.getElementById('form-error').classList.remove('hidden');
                 return;
             }
@@ -400,14 +426,14 @@
             // Prepare the confirmation message details - using product.price now
             const confirmationDetails = `
                 <div class="text-left space-y-2 text-gray-700">
-                    <p><strong>Item:</strong> ${product.name}</p>
-                    <p><strong>Total Price:</strong> <span class="text-teal-accent font-bold">৳ ${product.price}</span></p>
-                    <p><strong>Name:</strong> ${name}</p>
-                    <p><strong>Phone:</strong> ${phone}</p>
-                    <p><strong>Address:</strong> ${address}</p>
-                    <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+                    <p><strong>আইটেম (Item):</strong> ${product.name}</p>
+                    <p><strong>মোট মূল্য (Total Price):</strong> <span class="text-teal-accent font-bold">৳ ${product.price}</span></p>
+                    <p><strong>নাম (Name):</strong> ${name}</p>
+                    <p><strong>ফোন (Phone):</strong> ${phone}</p>
+                    <p><strong>ঠিকানা (Address):</strong> ${address}</p>
+                    <p><strong>পেমেন্ট পদ্ধতি (Payment Method):</strong> ${paymentMethod}</p>
                 </div>
-                <p class="mt-4 text-sm text-gray-500">A representative will contact you shortly to confirm the MFS payment details.</p>
+                <p class="mt-4 text-sm text-gray-500">আপনার MFS পেমেন্ট বিবরণ নিশ্চিত করার জন্য একজন প্রতিনিধি শীঘ্রই আপনার সাথে যোগাযোগ করবেন।</p>
             `;
 
             // Display confirmation screen
@@ -424,14 +450,14 @@
                     <!-- Checkmark Icon -->
                     <svg class="w-16 h-16 text-teal-accent mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     
-                    <h2 class="text-2xl font-bold text-charcoal mb-4">Order Confirmed!</h2>
+                    <h2 class="text-2xl font-bold text-charcoal mb-4">অর্ডার নিশ্চিত! (Order Confirmed!)</h2>
                     
-                    <div class="bg-light-gray p-4 rounded-lg shadow-inner inline-block">
+                    <div class="bg-light-gray p-4 rounded-lg shadow-inner inline-block text-left">
                         ${detailsHTML}
                     </div>
 
                     <button onclick="closeCheckoutModal()" class="mt-8 w-full px-6 py-3 bg-teal-accent text-white rounded-full font-bold hover:bg-[#158C7C] transition duration-200">
-                        Continue Shopping
+                        কেনাকাটা চালিয়ে যান (Continue Shopping)
                     </button>
                 </div>
             `;
@@ -610,9 +636,7 @@
                         Students Friendly Hub In Rajshahi
                     </h1>
                     <p class="text-base sm:text-xl text-gray-600 mb-6">Premium Essentials for a Minimal Price. Guaranteed Student Savings!</p>
-                    <a href="#top-selling-products-strip" class="px-6 py-3 bg-teal-accent text-white font-bold rounded-full shadow-lg hover:bg-[#158C7C] transition duration-200 uppercase text-sm sm:text-base">
-                        View Top Selling Deals
-                    </a>
+                    <!-- View Top Selling Deals Button was removed here per user request -->
                 </div>
             </section>
             
@@ -727,6 +751,7 @@
         <div class="absolute inset-0" onclick="closeCheckoutModal()"></div>
 
         <!-- Modal Content Container -->
+        <!-- MODAL: max-w-lg is good, adjusted internal padding for better mobile view -->
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto transform transition-all duration-300 relative z-10">
             
             <!-- Close Button -->
@@ -737,11 +762,12 @@
 
             <!-- Checkout Form Content -->
             <div id="modal-content-form">
-                <div class="bg-charcoal text-white p-6 rounded-t-xl text-center">
-                    <h2 class="text-2xl font-bold">Complete Your Order</h2>
+                <div class="bg-charcoal text-white p-4 sm:p-6 rounded-t-xl text-center">
+                    <h2 class="text-xl sm:text-2xl font-bold">Complete Your Order</h2>
                 </div>
 
-                <div class="p-6">
+                <!-- MAIN FORM CONTENT (Responsive Padding: p-4 sm:p-6) -->
+                <div class="p-4 sm:p-6">
                     
                     <!-- Product Summary -->
                     <div class="flex items-center space-x-4 mb-6 border-b pb-4">
@@ -754,24 +780,31 @@
                     </div>
 
                     <form id="checkout-form" onsubmit="handleCheckoutSubmit(event)">
-                        <!-- Customer Information -->
+                        
+                        <!-- 1. Customer Information (Always visible) -->
                         <h4 class="text-lg font-bold text-charcoal mb-3">1. Your Contact Information</h4>
                         <div class="space-y-4 mb-6">
-                            <input type="text" id="name" placeholder="Full Name" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-accent focus:border-teal-accent transition">
-                            <input type="tel" id="phone" placeholder="Phone Number (e.g., 01XXXXXXXXX)" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-accent focus:border-teal-accent transition">
-                            <textarea id="address" placeholder="Full Delivery Address in Rajshahi" required rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-accent focus:border-teal-accent transition"></textarea>
+                            <input type="text" id="name" placeholder="Full Name (সম্পূর্ণ নাম)" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-accent focus:border-teal-accent transition">
+                            <input type="tel" id="phone" placeholder="Phone Number (ফোন নম্বর)" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-accent focus:border-teal-accent transition">
+                            <textarea id="address" placeholder="Full Delivery Address in Rajshahi (সম্পূর্ণ ঠিকানা)" required rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-accent focus:border-teal-accent transition"></textarea>
                         </div>
-
-                        <!-- Payment Method Selection -->
-                        <h4 class="text-lg font-bold text-charcoal mb-3">2. Select Payment Method</h4>
-                        <div class="space-y-3 mb-6">
+                        
+                        <!-- 2. Payment Method Selection (Collapsible Toggle) -->
+                        <button type="button" onclick="togglePaymentSection()" class="w-full flex justify-between items-center text-lg font-bold text-charcoal p-3 mb-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition duration-200 shadow-sm">
+                            <span>2. Select Payment Method (পেমেন্ট পদ্ধতি)</span>
+                            <!-- Icon: starts pointing right (0deg), rotates 90deg when open -->
+                            <svg id="payment-toggle-icon" class="w-5 h-5 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                        
+                        <!-- Payment Method Content (Initially Hidden) -->
+                        <div id="payment-method-content" class="space-y-3 mb-6 hidden">
                             
                             <!-- bKash Option -->
                             <label class="flex items-center p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-light-gray transition duration-150 has-checked:border-teal-accent">
-                                <input type="radio" name="payment_method" value="bKash" class="form-radio h-5 w-5 text-teal-accent checked:bg-teal-accent focus:ring-teal-accent" required>
+                                <input type="radio" name="payment_method" value="bKash" class="form-radio h-5 w-5 text-teal-accent checked:bg-teal-accent focus:ring-teal-accent">
                                 <span class="ml-3 font-semibold text-gray-700 flex items-center">
                                     <img src="https://placehold.co/40x20/E11961/FFFFFF?text=bKash" alt="bKash Logo" class="w-10 h-5 object-contain mr-2 rounded">
-                                    bKash (Mobile Banking)
+                                    bKash (মোবাইল ব্যাংকিং)
                                 </span>
                             </label>
 
@@ -780,7 +813,7 @@
                                 <input type="radio" name="payment_method" value="Rocket" class="form-radio h-5 w-5 text-teal-accent checked:bg-teal-accent focus:ring-teal-accent">
                                 <span class="ml-3 font-semibold text-gray-700 flex items-center">
                                     <img src="https://placehold.co/40x20/92278F/FFFFFF?text=Rocket" alt="Rocket Logo" class="w-10 h-5 object-contain mr-2 rounded">
-                                    Rocket (Mobile Banking)
+                                    Rocket (মোবাইল ব্যাংকিং)
                                 </span>
                             </label>
                             
@@ -789,14 +822,24 @@
                                 <input type="radio" name="payment_method" value="Nagad" class="form-radio h-5 w-5 text-teal-accent checked:bg-teal-accent focus:ring-teal-accent">
                                 <span class="ml-3 font-semibold text-gray-700 flex items-center">
                                     <img src="https://placehold.co/40x20/FF7701/FFFFFF?text=Nagad" alt="Nagad Logo" class="w-10 h-5 object-contain mr-2 rounded">
-                                    Nagad (Mobile Banking)
+                                    Nagad (মোবাইল ব্যাংকিং)
                                 </span>
                             </label>
+                            
+                            <!-- Cash on Delivery Option -->
+                            <label class="flex items-center p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-light-gray transition duration-150">
+                                <input type="radio" name="payment_method" value="Cash on Delivery" class="form-radio h-5 w-5 text-teal-accent checked:bg-teal-accent focus:ring-teal-accent">
+                                <span class="ml-3 font-semibold text-gray-700 flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-charcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m4 2h2m-4 0h2m4-2h2m-4 0V9m0 6a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                    ক্যাশ অন ডেলিভারি (Cash on Delivery)
+                                </span>
+                            </label>
+
                         </div>
 
                         <!-- Summary & Submit -->
                         <div class="flex justify-between items-center bg-gray-100 p-4 rounded-lg mb-4">
-                            <span class="text-lg font-semibold text-charcoal">Total Payable:</span>
+                            <span class="text-lg font-semibold text-charcoal">Total Payable (মোট মূল্য):</span>
                             <span id="checkout-total-price" class="text-2xl font-extrabold text-teal-accent">৳ 000</span>
                         </div>
                         
@@ -804,7 +847,7 @@
                         <p id="form-error" class="hidden text-sm text-center text-red-600 mb-4 font-medium"></p>
 
                         <button type="submit" class="w-full px-6 py-3 bg-teal-accent text-white font-bold rounded-full shadow-lg hover:bg-[#158C7C] transition duration-200 uppercase">
-                            Place Order (Cash on Delivery / MFS)
+                            অর্ডার করুন (Place Order)
                         </button>
                     </form>
                 </div>
