@@ -406,8 +406,88 @@
             document.getElementById('checkout-form').reset();
         }
 
-        function handleCheckoutSubmit(event) {
-            event.preventDefault();
+        // ... index.html এর ভেতরের <script> ট্যাগ এর মধ্যে
+async function handleCheckoutSubmit(event) {
+    event.preventDefault();
+
+    // 1. ইনপুট ডেটা ভ্যালিডেশন (Validation)
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const address = document.getElementById('address').value.trim();
+    const paymentMethodElement = document.querySelector('input[name="payment_method"]:checked');
+    const formError = document.getElementById('form-error');
+
+    formError.classList.add('hidden'); // Clear previous errors
+
+    if (!name || !phone || !address || !paymentMethodElement) {
+        formError.textContent = 'দয়া করে সমস্ত তথ্য পূরণ করুন এবং একটি পেমেন্ট পদ্ধতি নির্বাচন করুন।';
+        formError.classList.remove('hidden');
+        return;
+    }
+    
+    const product = currentCheckoutProduct;
+
+    // 2. অর্ডার ডেটা পেলোড তৈরি
+    const orderPayload = {
+        name: name,
+        phone: phone,
+        address: address,
+        payment_method: paymentMethodElement.value,
+        
+        // প্রোডাক্টের তথ্য
+        product_id: product.id,
+        product_name: product.name,
+        total_price: product.price,
+    };
+    
+    // 3. Netlify Function এর Endpoint
+    const functionEndpoint = '/.netlify/functions/save-order'; // এটি আপনার save-order.js ফাইলের পাথ
+    const submitButton = event.submitter;
+    submitButton.disabled = true; // সাবমিট করার সময় বাটন ডিসেবল করা
+    submitButton.textContent = 'অর্ডার করা হচ্ছে...'; // লোডিং টেক্সট
+
+    try {
+        // 4. Netlify Function-কে কল করা
+        const response = await fetch(functionEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderPayload),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            // 5. সফল হলে কনফার্মেশন মেসেজ দেখানো
+            const confirmationDetails = `
+                <div class="text-left space-y-2 text-gray-700">
+                    <p><strong>আইটেম:</strong> ${product.name}</p>
+                    <p><strong>মোট মূল্য:</strong> <span class="text-teal-accent font-bold">৳ ${product.price}</span></p>
+                    <p><strong>নাম:</strong> ${orderPayload.name}</p>
+                    <p><strong>ফোন:</strong> ${orderPayload.phone}</p>
+                    <p><strong>ঠিকানা:</strong> ${orderPayload.address}</p>
+                    <p><strong>পেমেন্ট পদ্ধতি:</strong> ${orderPayload.payment_method}</p>
+                    <p class="mt-2 text-xs text-salmon-accent">অর্ডার আইডি: ${result.orderId || 'N/A'}</p>
+                </div>
+                <p class="mt-4 text-sm text-gray-500">আপনার MFS পেমেন্ট বিবরণ নিশ্চিত করার জন্য একজন প্রতিনিধি শীঘ্রই আপনার সাথে যোগাযোগ করবেন।</p>
+            `;
+            showConfirmationMessage(confirmationDetails);
+
+        } else {
+            // 6. সার্ভার থেকে কোনো ত্রুটি এলে
+            formError.textContent = `অর্ডার ব্যর্থ: ${result.message || 'সার্ভারে ত্রুটি হয়েছে।'}`;
+            formError.classList.remove('hidden');
+        }
+
+    } catch (error) {
+        console.error('Network or Function Call Error:', error);
+        formError.textContent = 'নেটওয়ার্ক সংযোগে সমস্যা। অনুগ্রহ করে আবার চেষ্টা করুন।';
+        formError.classList.remove('hidden');
+    } finally {
+        // 7. কাজ শেষ হলে বাটন রিস্টোর করা
+        submitButton.disabled = false;
+        submitButton.textContent = 'অর্ডার নিশ্চিত করুন';
+    }
+}
 
             const name = document.getElementById('name').value.trim();
             const phone = document.getElementById('phone').value.trim();
@@ -886,3 +966,4 @@
 
 </body>
 </html>
+
