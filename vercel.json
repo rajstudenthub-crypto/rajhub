@@ -1,14 +1,21 @@
-
 {
+"builds": [
+{
+"src": "Index.html",
+"use": "@vercel/static-build",
+"config": {
+"distDir": "."
+}
+},
+{
+"src": "netlify/functions/save-order.js",
+"use": "@vercel/node"
+}
+],
 "rewrites": [
 {
 "source": "/",
 "destination": "/Index.html"
 }
-],
-"functions": {
-"netlify/functions/save-order.js": {
-"runtime": "@vercel/node"
-}
-}
+]
 }
