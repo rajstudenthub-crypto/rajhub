@@ -1,0 +1,9 @@
+{
+  "name": "rajhub-mfs-processor",
+  "version": "1.0.0",
+  "description": "Netlify function to save MFS order data to Firestore.",
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^11.10.1" 
+  }
+}
