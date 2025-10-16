@@ -208,8 +208,9 @@
                 if (products.length > 1) {
                     html += `
                         <div class="text-center mt-6">
+                            <!-- UPDATED: Background color changed from salmon-accent to bg-teal-accent -->
                             <button onclick="toggleCategoryView('${category}', '${containerId}')" 
-                                class="px-6 py-3 bg-salmon-accent text-white font-bold rounded-full shadow-lg hover:bg-red-500 transition duration-200 uppercase text-sm">
+                                class="px-6 py-3 bg-teal-accent text-white font-bold rounded-full shadow-lg hover:bg-[#158C7C] transition duration-200 uppercase text-sm">
                                 See ${totalRemaining} More Products
                             </button>
                         </div>
@@ -317,21 +318,20 @@
                     <h3 class="text-lg font-semibold text-charcoal mb-3 truncate">${product.name}</h3>
                     
                     <!-- 
-                        *** IMPORTANT MOBILE FIX HERE ***
-                        - Removed flex-col (vertical stacking on mobile).
-                        - Added flex justify-between items-center to ensure price and button are always side-by-side.
-                        - Removed w-full from the button so it shrinks to fit content on mobile, achieving the minimal look. 
+                        UPDATED FOR MINIMALIST MOBILE LOOK:
+                        - Price is now Charcoal and slightly bolder.
+                        - Button is now Teal, uses a cleaner rounded-lg shape, and has better padding/font-size (text-sm) for touch.
                     -->
                     <div class="flex justify-between items-center">
                         <!-- Price on Left -->
                         <div class="text-left flex-shrink-0">
-                            <!-- text-xl price -->
-                            <span class="final-price text-xl font-extrabold text-teal-accent">৳ ${product.price}</span>
+                            <!-- Changed color from text-teal-accent to text-charcoal for cleaner look -->
+                            <span class="final-price text-xl font-bold text-charcoal">৳ ${product.price}</span>
                         </div>
                         
                         <!-- Button on Right -->
                         <button onclick="handleKinunClick(${product.id})" 
-                            class="kinun-button flex-shrink-0 px-3 py-1.5 bg-salmon-accent text-white text-xs rounded-full font-semibold hover:bg-red-500 transition duration-200 shadow-md">
+                            class="kinun-button flex-shrink-0 px-4 py-1.5 bg-teal-accent text-white text-sm rounded-lg font-bold hover:bg-[#158C7C] transition duration-200 shadow-md">
                             Order Now
                         </button>
                     </div>
