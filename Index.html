@@ -373,6 +373,7 @@
             currentCheckoutProduct = product;
             
             // Populate modal with product info - using product.price now
+            // UPDATED: Now setting only the title and price text content
             document.getElementById('checkout-product-title').textContent = product.name;
             document.getElementById('checkout-product-price').textContent = `৳ ${product.price}`;
             document.getElementById('checkout-total-price').textContent = `৳ ${product.price}`;
@@ -769,15 +770,26 @@
                 <!-- MAIN FORM CONTENT (Responsive Padding: p-4 sm:p-6) -->
                 <div class="p-4 sm:p-6">
                     
-                    <!-- Product Summary -->
-                    <div class="flex items-center space-x-4 mb-6 border-b pb-4">
-                        <img id="product-image-modal" src="https://placehold.co/80x80/F4F4F4/2C3E50?text=Item" alt="Product Thumbnail" class="w-16 h-16 object-cover rounded-lg">
-                        <div>
-                            <p class="text-sm text-gray-500">Item:</p>
-                            <h3 id="checkout-product-title" class="text-xl font-semibold text-charcoal truncate">Product Name</h3>
+                    <!-- Product Summary (UPDATED FOR RESPONSIVENESS AND COMPACT LAYOUT) -->
+                    <div class="flex items-start space-x-4 mb-6 border-b pb-4">
+                        <img id="product-image-modal" src="https://placehold.co/80x80/F4F4F4/2C3E50?text=Item" alt="Product Thumbnail" class="w-14 h-14 sm:w-16 sm:h-16 object-cover rounded-lg flex-shrink-0">
+                        
+                        <!-- Flex container to hold Title and Price on one row -->
+                        <div class="flex-grow min-w-0">
+                            <!-- Item label smaller -->
+                            <p class="text-xs text-gray-500 mb-1">Item:</p>
+                            
+                            <!-- Title and Price in one row, allowing truncation on mobile -->
+                            <div class="flex justify-between items-start gap-2">
+                                <!-- Title is smaller (text-base) and truncates if necessary -->
+                                <h3 id="checkout-product-title" class="text-base font-semibold text-charcoal truncate min-w-0">Product Name</h3>
+                                
+                                <!-- Price is smaller (text-lg) and fixed width (whitespace-nowrap) -->
+                                <p id="checkout-product-price" class="text-lg font-extrabold text-teal-accent flex-shrink-0 whitespace-nowrap">৳ 000</p>
+                            </div>
                         </div>
-                        <p id="checkout-product-price" class="text-2xl font-extrabold text-teal-accent ml-auto">৳ 000</p>
                     </div>
+                    <!-- End of UPDATED Product Summary -->
 
                     <form id="checkout-form" onsubmit="handleCheckoutSubmit(event)">
                         
