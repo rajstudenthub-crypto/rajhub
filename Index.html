@@ -28,7 +28,7 @@
             font-weight: 700 !important;
         }
         
-        /* Styles for the auto-scrolling product track (ONLY for TOP SELLING) */
+        /* Styles for the auto-scrolling product track (Applies to all carousels on desktop) */
         .product-track {
             display: flex;
             overflow-x: scroll;
@@ -41,16 +41,18 @@
             padding-right: 0.5rem;
         }
         .product-card {
-            /* FIXED MOBILE WIDTH: Slightly narrower (from 40% to 38%) for more internal space */
+            /* MOBILE WIDTH (Applies when track is NOT visible, but used inside a track on mobile too) */
             flex: 0 0 calc(38% - 8px); 
             max-width: none;
             scroll-snap-align: start;
             margin-right: 1rem;
             margin-left: 0.5rem; 
         }
-        /* DESKTOP: Keep existing size */
+        
+        /* DESKTOP: Keep existing size, remove mobile margin/padding fixes */
         @media (min-width: 768px) {
             .product-card {
+                /* Larger desktop/tablet width */
                 flex: 0 0 28%; 
                 max-width: 260px;
                 margin-left: 0; 
@@ -139,6 +141,11 @@
         let currentScrollIntervals = [];
         let currentCheckoutProduct = null; // Global state for the checkout item
         
+        // Helper function to check if the current view is considered mobile (less than md breakpoint)
+        function isMobileView() {
+            return window.innerWidth < 768; // Tailwind md breakpoint
+        }
+
         function showPage(pageId) {
             // Stop all ongoing auto-scroll when switching pages
             currentScrollIntervals.forEach(clearInterval);
@@ -179,16 +186,84 @@
 
         // --- PRODUCT RENDERING FUNCTIONS ---
 
+        // New function to render the category strip responsively (Carousel for Desktop, 1-by-1 for Mobile)
+        function renderResponsiveCategoryStrip(category, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            // Filter non-featured products for the strip
+            const products = productData.filter(p => p.category === category && !p.isFeatured);
+            
+            if (isMobileView() && products.length > 0) {
+                // --- MOBILE VIEW LOGIC (1 by 1 + See More) ---
+                const initialProduct = products[0];
+                const totalRemaining = products.length - 1;
+
+                let html = '';
+                
+                // Render the first product card in single-column style (isCarousel=false)
+                html += renderProductCard(initialProduct, false);
+                
+                // Add the "See More" button if there's more than one product
+                if (products.length > 1) {
+                    html += `
+                        <div class="text-center mt-6">
+                            <button onclick="toggleCategoryView('${category}', '${containerId}')" 
+                                class="px-6 py-3 bg-salmon-accent text-white font-bold rounded-full shadow-lg hover:bg-red-500 transition duration-200 uppercase text-sm">
+                                See ${totalRemaining} More Products
+                            </button>
+                        </div>
+                    `;
+                }
+                container.innerHTML = html;
+
+            } else {
+                // --- DESKTOP VIEW LOGIC (Horizontal Scrollable Carousel) ---
+                
+                if (products.length === 0) {
+                    container.innerHTML = `<p class="text-center text-gray-500 p-4">No products available in ${category}.</p>`;
+                    return;
+                }
+
+                // Render all products in a horizontal scrollable strip (isCarousel=true)
+                let html = `
+                    <div id="${containerId}-track" class="product-track">
+                        ${products.map(product => renderProductCard(product, true)).join('')}
+                    </div>
+                `;
+                container.innerHTML = html;
+            }
+        }
+
+
+        // Function to show all products in a single-column list (Only called from Mobile's "See More")
+        function toggleCategoryView(category, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            // Filter ALL non-featured products belonging to this category
+            const products = productData.filter(p => p.category === category && !p.isFeatured);
+
+            // Render all products in a single column, one by one. (isCarousel=false)
+            const productsHTML = `
+                <!-- space-y-6 ensures separation between the full-width cards -->
+                <div class="space-y-6">
+                    ${products.map(product => renderProductCard(product, false)).join('')}
+                </div>
+                <div class="text-center mt-8 mb-4">
+                    <button onclick="showPage('home-page')" class="px-6 py-3 bg-teal-accent text-white font-bold rounded-full shadow-lg hover:bg-[#158C7C] transition duration-200 uppercase text-sm">
+                        Back to Top Selling
+                    </button>
+                </div>
+            `;
+
+            container.innerHTML = productsHTML;
+        }
+
         // Renders products for all carousels/grids on the Home Page
         function renderHomeCarousels() {
             // Featured (Carousel) Track
             const topSellingContainer = document.getElementById('top-selling-carousel-track');
-            
-            // Category (Grid) Tracks - NOTE: The IDs remain '...carousel-track' but they are now grids
-            const stationaryContainer = document.getElementById('stationary-carousel-track');
-            const girlsHubContainer = document.getElementById('girls-hub-carousel-track');
-            const boysHubContainer = document.getElementById('boys-hub-carousel-track');
-            const bagsContainer = document.getElementById('bags-carousel-track');
             
             // 1. Top Selling (Featured) Products - RENDERED AS CAROUSEL ITEMS (isCarousel = true)
             if (topSellingContainer) {
@@ -196,39 +271,14 @@
                 topSellingContainer.innerHTML = featuredProducts.map(product => renderProductCard(product, true)).join('');
             }
             
-            // Filter non-featured products for category strips
-            // Products must be in category AND NOT featured
-            
-            // 2. Stationery Hub - RENDERED AS GRID ITEMS (isCarousel = false)
-            if (stationaryContainer) {
-                const products = productData.filter(p => p.category === 'Stationery' && !p.isFeatured);
-                // NOTE: Passing 'false' for isCarousel to use the grid style
-                stationaryContainer.innerHTML = products.map(product => renderProductCard(product, false)).join('');
-            }
-            
-            // 3. Girls Hub products - RENDERED AS GRID ITEMS (isCarousel = false)
-            if (girlsHubContainer) {
-                const products = productData.filter(p => p.category === 'Girls Hub' && !p.isFeatured);
-                // NOTE: Passing 'false' for isCarousel to use the grid style
-                girlsHubContainer.innerHTML = products.map(product => renderProductCard(product, false)).join('');
-            }
-            
-            // 4. Boys Hub products - RENDERED AS GRID ITEMS (isCarousel = false)
-            if (boysHubContainer) {
-                const products = productData.filter(p => p.category === 'Boys Hub' && !p.isFeatured);
-                // NOTE: Passing 'false' for isCarousel to use the grid style
-                boysHubContainer.innerHTML = products.map(product => renderProductCard(product, false)).join('');
-            }
-
-            // 5. Bags products - RENDERED AS GRID ITEMS (isCarousel = false)
-            if (bagsContainer) {
-                const products = productData.filter(p => p.category === 'Bags' && !p.isFeatured);
-                // NOTE: Passing 'false' for isCarousel to use the grid style
-                bagsContainer.innerHTML = products.map(product => renderProductCard(product, false)).join('');
-            }
+            // 2-5. Use the responsive strip renderer for categories
+            renderResponsiveCategoryStrip('Stationery', 'stationary-category-container');
+            renderResponsiveCategoryStrip('Girls Hub', 'girls-hub-category-container');
+            renderResponsiveCategoryStrip('Boys Hub', 'boys-hub-category-container');
+            renderResponsiveCategoryStrip('Bags', 'bags-category-container');
         }
 
-        // Renders all products for a specific category page
+        // Renders all products for a specific category page (Full Grid View)
         function renderCategoryPage(category) {
             const container = document.getElementById(category.toLowerCase().replace(/\s/g, '-') + '-products');
             if (!container) return;
@@ -248,7 +298,9 @@
 
         // Helper function to generate a single product card HTML
         function renderProductCard(product, isCarousel) {
-            // cardClass determines if it needs the 'product-card' class (for flex/scrolling) or just a static grid item.
+            // cardClass determines if it needs the 'product-card' class (for flex/scrolling) or just a static item.
+            // isCarousel is true for ANY horizontal track (featured, or category strips on desktop).
+            // isCarousel is false for mobile single-item view and all full category pages.
             const cardClass = isCarousel 
                 ? 'product-card bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-[1.02]' 
                 : 'bg-white p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-[1.02]';
@@ -264,7 +316,7 @@
                     <!-- Increased spacing: mb-3 instead of mb-2 -->
                     <h3 class="text-lg font-semibold text-charcoal mb-3 truncate">${product.name}</h3>
                     
-                    <!-- !!! MOBILE FIX APPLIED HERE: FORCE VERTICAL STACK ON MOBILE (flex-col) and horizontal on tablet+ (sm:flex-row) !!! -->
+                    <!-- MOBILE FIX APPLIED HERE: FORCE VERTICAL STACK ON MOBILE (flex-col) and horizontal on tablet+ (sm:flex-row) -->
                     <div class="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-center sm:space-y-0">
                         <!-- Price on Left -->
                         <div class="text-left flex-shrink-0">
@@ -421,6 +473,27 @@
         }
         
         // --- Initialization ---
+        
+        // Function to re-render carousels on resize if the view mode changes
+        let resizeTimeout;
+        let lastIsMobile = isMobileView();
+
+        function handleResize() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const currentIsMobile = isMobileView();
+                // Only re-render if the state (mobile vs desktop) has actually changed
+                if (currentIsMobile !== lastIsMobile) {
+                    if (document.getElementById('home-page').classList.contains('hidden') === false) {
+                        renderHomeCarousels();
+                    }
+                    lastIsMobile = currentIsMobile;
+                }
+            }, 250); // Debounce time
+        }
+        
+        window.addEventListener('resize', handleResize);
+        
         window.onload = function() {
             // Mobile Menu Toggle
             const menuBtn = document.getElementById('mobile-menu-btn');
@@ -535,7 +608,7 @@
             
             <!-- --- FEATURED CAROUSELS --- -->
 
-            <!-- 1. TOP SELLING STRIP (CAROUSEL: Arrows and auto-scroll are KEPT) -->
+            <!-- 1. TOP SELLING STRIP (CAROUSEL) -->
             <section id="top-selling-products-strip" class="mb-12 relative">
                 <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-teal-accent pb-2">Top Selling</h2>
 
@@ -557,57 +630,50 @@
                 </div>
             </section>
             
-            <!-- --- CATEGORY GRIDS (CHANGED: Carousel to Grid) --- -->
+            <!-- --- CATEGORY LISTS (NEW: Responsive view) --- -->
             
-            <!-- 2. STATIONERY HUB STRIP (NOW A GRID) -->
+            <!-- 2. STATIONERY HUB STRIP -->
             <section id="stationary-products-strip" class="mb-12 relative">
                 <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-teal-accent pb-2">Stationery Hub</h2>
-
-                <!-- Product Cards Grid: Uses 'grid' classes instead of 'product-track' class -->
-                <div id="stationary-carousel-track" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-                    <!-- Stationery product cards are rendered here by JavaScript: renderHomeCarousels() -->
+                <!-- Container for the single item (mobile) or the expanded list/carousel (desktop) -->
+                <div id="stationary-category-container">
+                    <!-- Content generated by JS: Initial 1 item + See More button (mobile) OR Full Carousel (desktop) -->
                 </div>
             </section>
             
-            <!-- 3. GIRLS HUB STRIP (NOW A GRID) -->
+            <!-- 3. GIRLS HUB STRIP -->
             <section id="girls-hub-products-strip" class="mb-12 relative">
                 <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-teal-accent pb-2">Girls Hub</h2>
-
-                <!-- Product Cards Grid: Uses 'grid' classes instead of 'product-track' class -->
-                <div id="girls-hub-carousel-track" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-                    <!-- Girls Hub product cards are rendered here by JavaScript: renderHomeCarousels() -->
+                <div id="girls-hub-category-container">
+                    <!-- Content generated by JS -->
                 </div>
             </section>
 
-            <!-- 4. BOYS HUB STRIP (NOW A GRID) -->
+            <!-- 4. BOYS HUB STRIP -->
             <section id="boys-hub-products-strip" class="mb-12 relative">
                 <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-teal-accent pb-2">Boys Hub</h2>
-
-                <!-- Product Cards Grid: Uses 'grid' classes instead of 'product-track' class -->
-                <div id="boys-hub-carousel-track" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-                    <!-- Boys Hub product cards are rendered here by JavaScript: renderHomeCarousels() -->
+                <div id="boys-hub-category-container">
+                    <!-- Content generated by JS -->
                 </div>
             </section>
 
-            <!-- 5. BAGS STRIP (NOW A GRID) -->
+            <!-- 5. BAGS STRIP -->
             <section id="bags-products-strip" class="mb-12 relative">
                 <h2 class="text-2xl sm:text-3xl font-bold text-charcoal mb-6 border-b-2 border-teal-accent pb-2">Bags & Backpacks</h2>
-                
-                <!-- Product Cards Grid: Uses 'grid' classes instead of 'product-track' class -->
-                <div id="bags-carousel-track" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-                    <!-- Bags product cards are rendered here by JavaScript: renderHomeCarousels() -->
+                <div id="bags-category-container">
+                    <!-- Content generated by JS -->
                 </div>
             </section>
             
         </section>
 
         <!-- ============================================== -->
-        <!-- 2. CATEGORY PAGES VIEW (Simplified for brevity) -->
+        <!-- 2. CATEGORY PAGES VIEW (Full Grid) -->
         <!-- ============================================== -->
         <section id="stationary-page" class="content-page hidden min-h-[60vh]">
             <h1 class="text-3xl font-bold text-charcoal mb-8 border-b-2 border-teal-accent pb-2">Stationery Essentials</h1>
             <p class="mb-6 text-gray-600">High-quality pens, notebooks, and academic tools for focused study sessions across Rajshahi.</p>
-            <!-- Grid layout is maintained -->
+            <!-- Full grid view for the dedicated page -->
             <div id="stationary-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Stationery products will be rendered here by renderCategoryPage() -->
             </div>
@@ -616,7 +682,7 @@
         <section id="girls-hub-page" class="content-page hidden min-h-[60vh]">
             <h1 class="text-3xl font-bold text-charcoal mb-8 border-b-2 border-teal-accent pb-2">Girls Hub: Style & Organization</h1>
             <p class="mb-6 text-gray-600">Minimalist accessories, aesthetic planners, and stylish gear to complement your campus look.</p>
-            <!-- Grid layout is maintained -->
+            <!-- Full grid view for the dedicated page -->
             <div id="girls-hub-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Girls Hub products will be rendered here by renderCategoryPage() -->
             </div>
@@ -625,7 +691,7 @@
         <section id="boys-hub-page" class="content-page hidden min-h-[60vh]">
             <h1 class="text-3xl font-bold text-charcoal mb-8 border-b-2 border-teal-accent pb-2">Boys Hub: Tech & Utility</h1>
             <p class="mb-6 text-gray-600">Durable storage, essential tech gadgets, and tools built for engineering and science students.</p>
-            <!-- Grid layout is maintained -->
+            <!-- Full grid view for the dedicated page -->
             <div id="boys-hub-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Boys Hub products will be rendered here by renderCategoryPage() -->
             </div>
@@ -634,7 +700,7 @@
         <section id="bags-page" class="content-page hidden min-h-[60vh]">
             <h1 class="text-3xl font-bold text-charcoal mb-8 border-b-2 border-teal-accent pb-2">Bags & Backpacks</h1>
             <p class="mb-6 text-gray-600">Water-resistant backpacks and simple totes designed to carry laptops and study material safely.</p>
-            <!-- Grid layout is maintained -->
+            <!-- Full grid view for the dedicated page -->
             <div id="bags-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Bags products will be rendered here by renderCategoryPage() -->
             </div>
