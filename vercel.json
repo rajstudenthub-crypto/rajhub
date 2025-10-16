@@ -1,16 +1,6 @@
 {
 "builds": [
-{
-"src": "Index.html",
-"use": "@vercel/static-build",
-"config": {
-"distDir": "."
-}
-},
-{
-"src": "netlify/functions/save-order.js",
-"use": "@vercel/node"
-}
+// ... builds config ...
 ],
 "rewrites": [
 {
